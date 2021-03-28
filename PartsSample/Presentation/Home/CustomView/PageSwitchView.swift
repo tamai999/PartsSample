@@ -1,0 +1,168 @@
+//
+//  PageSwitchView.swift
+//  PartsSample
+//
+
+import UIKit
+import SnapKit
+
+protocol  PageSwitchViewDelegate {
+    // ページ切り替えボタンがタップされた
+    func didTapPageButton(index: Int)
+}
+
+fileprivate struct Const {
+    static let scrollViewHeight: CGFloat = 30
+    static let pageLabelWidth: CGFloat = 100
+    static let pageStackViewSpace: CGFloat = 0
+    static let pageStackViewVerticalMargin: CGFloat = 2
+    static let pageIndicatorHeight: CGFloat = 2
+}
+
+/// ページ切り替えビュー
+class PageSwitchView: UIView {
+    
+    // MARK: - private properties
+    
+    private let scrollView = UIScrollView()
+    private let pageStackView = UIStackView()
+    private var pageButtons: [UIButton] = []
+    private let pageIndicator = UIView()
+    private var pageIndicatorXConstraint: NSLayoutConstraint?
+    private var pageNames: [String] = []
+    
+    // MARK: - internal properties
+    
+    var delegate: PageSwitchViewDelegate?
+    
+    // MARK: - lifecycle
+    
+    required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
+    
+    init(pageNames: [String]) {
+        super.init(frame: CGRect.zero)
+        
+        self.pageNames = pageNames
+        
+        setupView()
+        setupLayout()
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        if bounds.width > (Const.pageLabelWidth * CGFloat(pageButtons.count)) {
+            // ページスイッチの表示幅より画面幅が大きければ、スクロール位置を中央にしておく
+            let offsetX = self.scrollView.bounds.width / 2 - self.pageStackView.bounds.width / 2
+            self.scrollView.setContentOffset(CGPoint(x: -offsetX, y: 0), animated: false)
+        }
+        // 子ビューのレイアウトが終わったらスクロール位置を再設定するようにレイアウトし直す
+        setNeedsLayout()
+    }
+    
+    // MARK: - internal methods
+    
+    /// ページ切り替えビューの表示ページを変更する（適宜スクロールする）
+    /// - Parameter index: ページ番号(0~)
+    func updatePageIndex(_ index: Int) {
+        guard index < pageButtons.count else { return }
+        
+        let buttonWidth = scrollView.contentSize.width / CGFloat(pageButtons.count)
+        if scrollView.bounds.width < scrollView.contentSize.width {
+            // ページのラベルをスクロール
+            
+            // 左端からのペーボタンの中心座標
+            let pageCenter = (buttonWidth / 2) + (buttonWidth * CGFloat(index))
+            // ウィンドの横幅を取得
+            let viewCenter = bounds.width / 2
+            // スクロール範囲を超えたスクロールはさせない
+            var offsetX = pageCenter - viewCenter
+            if offsetX < 0 {
+                offsetX = 0
+            } else if offsetX > scrollView.contentSize.width - bounds.width {
+                offsetX = scrollView.contentSize.width - bounds.width
+            }
+            scrollView.setContentOffset(CGPoint(x: offsetX, y: 0), animated: true)
+        }
+        
+        // ページのインジケーターを移動する
+        layoutIfNeeded()
+        if let constraint = pageIndicatorXConstraint {
+            constraint.isActive = false
+            pageIndicator.removeConstraint(constraint)
+        }
+        let indicatorX = CGFloat(index) * buttonWidth
+        pageIndicatorXConstraint = pageIndicator.leftAnchor.constraint(equalTo: scrollView.leftAnchor, constant: indicatorX)
+        pageIndicatorXConstraint?.isActive = true
+
+        UIView.animate(withDuration: 0.2) {
+            self.layoutIfNeeded()
+        }
+    }
+}
+
+// MARK: - private
+
+private extension PageSwitchView {
+    private func setupView() {
+        // スクロールビュー
+        scrollView.backgroundColor = R.color.carouselBackground()
+        scrollView.showsHorizontalScrollIndicator = false
+        addSubview(scrollView)
+        // スクロールビュー内スタックビュー
+        scrollView.addSubview(pageStackView)
+        // ページ切り替えボタン
+        pageNames.enumerated().forEach() { page in
+            // ボタン生成
+            let button = UIButton()
+            button.setTitle(page.element, for: .normal)
+            button.tag = page.offset
+            button.titleLabel?.font = UIFont.pageSwitcherFont
+            button.setTitleColor(R.color.label(), for: .normal)
+            button.addTarget(self, action: #selector(didTapPageButton), for: .touchUpInside)
+            pageButtons.append(button)
+            
+            pageStackView.addArrangedSubview(button)
+        }
+        // ページのインジケーター
+        pageIndicator.backgroundColor = R.color.pageSelected()
+        scrollView.addSubview(pageIndicator)
+    }
+    
+    func setupLayout() {
+        // ページ切り替えスクロールビュー
+        scrollView.snp.makeConstraints { make in
+            make.top.left.right.equalTo(self)
+            make.height.equalTo(Const.scrollViewHeight)
+        }
+        
+        // スクロールビュー内のスタックビュー
+        pageStackView.axis = .horizontal
+        pageStackView.alignment = .center
+        pageStackView.distribution = .equalSpacing
+        pageStackView.spacing = Const.pageStackViewSpace
+        pageStackView.snp.makeConstraints { make in
+            make.top.left.right.equalTo(scrollView.contentLayoutGuide)
+            make.height.equalTo(scrollView.frameLayoutGuide).offset(-Const.pageStackViewVerticalMargin)
+        }
+        
+        // ページ切り替えボタン
+        pageButtons.forEach() { button in
+            button.snp.makeConstraints { make in
+                make.width.equalTo(Const.pageLabelWidth)
+            }
+        }
+        
+        // ページのインジケーター
+        pageIndicator.snp.makeConstraints { make in
+            make.height.equalTo(Const.pageIndicatorHeight)
+            make.width.equalTo(Const.pageLabelWidth)
+            make.bottom.equalTo(pageStackView.snp.bottom)
+        }
+        pageIndicatorXConstraint = pageIndicator.leftAnchor.constraint(equalTo: scrollView.leftAnchor)
+        pageIndicatorXConstraint?.isActive = true        
+    }
+    
+    @objc func didTapPageButton(sender: UIView) {
+        delegate?.didTapPageButton(index: sender.tag)
+    }
+}
