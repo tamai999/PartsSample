@@ -5,10 +5,6 @@
 
 import UIKit
 
-protocol ImageItemCellViewDelegate {
-    func didTapImageCell(section: Int, row: Int)
-}
-
 fileprivate struct Const {
     static let priceLabelHeight: CGFloat = 20
 }
@@ -19,15 +15,19 @@ class ImageItemCellView: UICollectionViewCell {
 
     private let imageView = UIImageView()
     private let priceLabel = UILabel()
-    private let coverButton = UIButton()
     private let checkImageView = UIImageView()
+    
+    private var dentAnimator: UIViewPropertyAnimator?
     
     private var section: Int!
     private var row: Int!
     
-    private var isAnimating = false
+    private var isSelectMode = false
+//    private var isAnimating = false
     
-    private var isChecked = false {
+    // MARK: - internal properties
+    
+    var isChecked = false {
         didSet {
             if #available(iOS 13.0, *) {
                 if isChecked {
@@ -38,10 +38,6 @@ class ImageItemCellView: UICollectionViewCell {
             }
         }
     }
-    
-    // MARK: - internal properties
-    
-    var delegate: ImageItemCellViewDelegate?
     
     // MARK: - lifecycle
     
@@ -60,6 +56,51 @@ class ImageItemCellView: UICollectionViewCell {
         setupLayout()
     }
 
+    //
+    // セルタップでセルを縮小（凹んだように見せる）
+    //
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+
+        // セル選択モードの時は何もしない
+        guard !isSelectMode else { return }
+        // セルを凹ますアニメーション開始
+        dentAnimator = UIViewPropertyAnimator(duration: 0.1, curve: .easeIn) {
+            self.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+        }
+        dentAnimator?.startAnimation()
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesEnded(touches, with: event)
+        dentReverseAnimation()
+    }
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesMoved(touches, with: event)
+        dentReverseAnimation()
+    }
+    
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesCancelled(touches, with: event)
+        dentReverseAnimation()
+    }
+    
+    private func dentReverseAnimation() {
+        if dentAnimator?.isRunning == .some(true) {
+            // アニメーション中ならアニメーション終了後にセルサイズを元に戻すようにする
+            dentAnimator?.addCompletion { _ in
+                self.transform = CGAffineTransform(scaleX: 1, y: 1)
+            }
+        } else {
+            // 凹ますアニメーション完了後なら元にのサイズにするアニメーションを開始
+            dentAnimator = UIViewPropertyAnimator(duration: 0.1, curve: .easeIn) {
+                self.transform = CGAffineTransform(scaleX: 1, y: 1)
+            }
+            dentAnimator?.startAnimation()
+        }
+    }
+    
     // MARK: - intarnal
     
     /// 画像セルのセットアップ
@@ -78,9 +119,10 @@ class ImageItemCellView: UICollectionViewCell {
         self.section = section
         self.row = row
         // 選択モード（チェックボックス表示）
+        self.isSelectMode = isSelectMode
         checkImageView.isHidden = !isSelectMode
         // ボタンの活性・非活性（選択モードならボタンタップできる）
-        coverButton.isHidden = !isSelectMode
+// TODO:        coverButton.isHidden = !isSelectMode
         // チェック状態
         isChecked = false
     }
@@ -106,13 +148,6 @@ private extension ImageItemCellView {
             checkImageView.backgroundColor = .red
         }
         addSubview(checkImageView)
-        // セル全体をボタン化
-        coverButton.backgroundColor = .clear
-        coverButton.addTarget(self, action: #selector(cellTapped), for: .touchUpInside)
-        addSubview(coverButton)
-        // セルのタップ検出
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureRecognize))
-        addGestureRecognizer(tapGesture)
     }
     
     func setupLayout() {
@@ -128,31 +163,5 @@ private extension ImageItemCellView {
                                    height: Const.priceLabelHeight)
         // チェックイメージ
         checkImageView.frame = CGRect(x: 5, y: 5, width: 20, height: 20)
-        // セル全体をボタン化
-        coverButton.frame = bounds
-    }
-    
-    @objc
-    func cellTapped(sender: Any) {
-        print("section [\(section!)] row[\(row!)]")
-        
-        isChecked = !isChecked
-    }
-    
-    @objc
-    func tapGestureRecognize(_ sender: UITapGestureRecognizer){
-        guard !isAnimating else { return }
-        isAnimating = true
-        
-        // 凹ますアニメーション
-        UIView.animate(withDuration: 0.1, animations: {
-            self.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-        }, completion: { _ in
-            self.transform = CGAffineTransform(scaleX: 1, y: 1)
-            self.isAnimating = false
-            
-            self.delegate?.didTapImageCell(section: self.section, row: self.row)
-        })
     }
 }
-

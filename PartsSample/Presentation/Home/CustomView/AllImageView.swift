@@ -220,6 +220,15 @@ extension AllImageView: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("didSelectItemAt section[\(indexPath.section)] index [\(indexPath.row)]")
+        if !isSelectMode {
+            delegate?.didTapImageCell(section: indexPath.section, row: indexPath.row)
+        } else {
+            guard let cell = collectionView.cellForItem(at: indexPath) as? ImageItemCellView else {
+                return
+            }
+            
+            cell.isChecked = !cell.isChecked
+        }
     }
 }
 
@@ -242,7 +251,6 @@ extension AllImageView: UICollectionViewDataSource {
         if let cell = cell as? ImageItemCellView {
             let item = imageLists[indexPath.section].items[indexPath.row]
             cell.setupCell(image: item.image, price: item.price, section: indexPath.section, row: indexPath.row, isSelectMode: isSelectMode)
-            cell.delegate = self
         }
         
         return cell
@@ -303,13 +311,5 @@ extension AllImageView: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: bounds.width, height: Const.headerHeight)
-    }
-}
-
-// MARK: - ImageItemCellViewDelegate
-
-extension AllImageView: ImageItemCellViewDelegate {
-    func didTapImageCell(section: Int, row: Int) {
-        delegate?.didTapImageCell(section: section, row: row)
     }
 }

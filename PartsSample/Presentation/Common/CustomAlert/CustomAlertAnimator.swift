@@ -30,23 +30,22 @@ class CustomAlertAnimator: NSObject, UIViewControllerAnimatedTransitioning {
             //
             // アラート表示アニメーション
             //
-            guard let toVC = context.viewController(forKey: .to),
-                  let alertVC = toVC as? CustomAlertViewController,
+            guard let alertVC = context.viewController(forKey: .to) as? CustomAlertViewController,
                   let yConstraint = alertVC.centerYConstraint else  {
                 context.cancelInteractiveTransition()
                 return
             }
             // コンテナビューにアラートビューを追加する
-            context.containerView.addSubview(toVC.view)
+            context.containerView.addSubview(alertVC.view)
             // 制約を変更する前に未適用のレイアウトを適用しておく
-            toVC.view.layoutIfNeeded()
+            alertVC.view.layoutIfNeeded()
             // アラート表示アニメーション（少し下からアラートが上がってくる）
-            toVC.view.alpha = 0.0
+            alertVC.view.alpha = 0.0
             yConstraint.constant = 0
             UIView.animate(withDuration: transitionDuration(using: context),
                            animations: {
-                            toVC.view.alpha = 1.0
-                            toVC.view.layoutIfNeeded()
+                            alertVC.view.alpha = 1.0
+                            alertVC.view.layoutIfNeeded()
                            },
                            completion: { didComplete in
                             context.completeTransition(didComplete)
