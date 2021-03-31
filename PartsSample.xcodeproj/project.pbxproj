@@ -17,6 +17,7 @@
 		970BB20525FCD0FB00F05F4F /* ItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 970BB20425FCD0FB00F05F4F /* ItemView.swift */; };
 		9722C8A925FF7BA90062EBBF /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9722C8A825FF7BA90062EBBF /* PageViewController.swift */; };
 		9722C8C325FF87A90062EBBF /* NotificationName+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9722C8C225FF87A90062EBBF /* NotificationName+Extension.swift */; };
+		972928B22614033E0060F222 /* ImageDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 972928B12614033E0060F222 /* ImageDetailViewController.swift */; };
 		9729333D260424B800E989A8 /* CustomRefreshControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9729333C260424B800E989A8 /* CustomRefreshControl.swift */; };
 		97293341260431F600E989A8 /* RefreshAnimationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97293340260431F600E989A8 /* RefreshAnimationView.swift */; };
 		974D34A82605FADD00E43A9C /* AllImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 974D34A72605FADD00E43A9C /* AllImageViewController.swift */; };
@@ -58,6 +59,7 @@
 		970BB20425FCD0FB00F05F4F /* ItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemView.swift; sourceTree = "<group>"; };
 		9722C8A825FF7BA90062EBBF /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		9722C8C225FF87A90062EBBF /* NotificationName+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationName+Extension.swift"; sourceTree = "<group>"; };
+		972928B12614033E0060F222 /* ImageDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailViewController.swift; sourceTree = "<group>"; };
 		9729333C260424B800E989A8 /* CustomRefreshControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomRefreshControl.swift; sourceTree = "<group>"; };
 		97293340260431F600E989A8 /* RefreshAnimationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshAnimationView.swift; sourceTree = "<group>"; };
 		974D34A72605FADD00E43A9C /* AllImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllImageViewController.swift; sourceTree = "<group>"; };
@@ -144,6 +146,7 @@
 				97881AA1260F4DBD009C8925 /* Page2ViewController.swift */,
 				97814AF425FE122D006BDF5F /* PageNViewController.swift */,
 				974D34A72605FADD00E43A9C /* AllImageViewController.swift */,
+				972928B12614033E0060F222 /* ImageDetailViewController.swift */,
 			);
 			path = ViewController;
 			sourceTree = "<group>";
@@ -352,7 +355,7 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$SRCROOT/R.generated.swift",
+				$SRCROOT/R.generated.swift,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -417,6 +420,7 @@
 				9771678425FC77E20024B1D7 /* AppDelegate.swift in Sources */,
 				97814AF025FE11E9006BDF5F /* Page1ViewController.swift in Sources */,
 				97881AA2260F4DBD009C8925 /* Page2ViewController.swift in Sources */,
+				972928B22614033E0060F222 /* ImageDetailViewController.swift in Sources */,
 				970BB20525FCD0FB00F05F4F /* ItemView.swift in Sources */,
 				97881A9F260F4703009C8925 /* CustomAlertViewController.swift in Sources */,
 				97814AE525FDECEA006BDF5F /* Int+Extension.swift in Sources */,

@@ -50,7 +50,18 @@ class AllImageViewController: UIViewController {
 
     // 画像を更新する
     func updateImageList(lists: [(String, [ImageItem])]) {
-        allImageView.setItemLists(lists)
+        DispatchQueue.main.async {
+            self.allImageView.setItemLists(lists)
+        }
+    }
+    
+    // 画像詳細画面を表示する
+    func gotoImageDetailView(image: UIImage) {
+        DispatchQueue.main.async {
+            let vc = ImageDetailViewController(image: image)
+            vc.modalPresentationStyle = .fullScreen
+            self.present(vc, animated: true)
+        }
     }
 }
 
@@ -61,6 +72,7 @@ private extension AllImageViewController {
     func setupView() {
         // ビューを差し替える
         view = allImageView
+        allImageView.delegate = self
         // タイトル
         title = "タイプ [\(type.rawValue)]"
         // メニュー
@@ -109,5 +121,13 @@ private extension AllImageViewController {
     @objc
     func trashTapped(sender: Any) {
         presenter.onEditButtonTapped()
+    }
+}
+
+// MARK: - AllImageViewDelegate
+
+extension AllImageViewController: AllImageViewDelegate {
+    func didTapImageCell(section: Int, row: Int) {
+        presenter.onImageTapped(section: section, row: row)
     }
 }

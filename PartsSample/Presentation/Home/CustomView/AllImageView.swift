@@ -5,6 +5,10 @@
 
 import UIKit
 
+protocol AllImageViewDelegate {
+    func didTapImageCell(section: Int, row: Int)
+}
+
 fileprivate struct Const {
     // レイアウト
     static let horizontalMargin: CGFloat = 16
@@ -34,7 +38,7 @@ class AllImageView: UIView {
     private var imageLists: [(title: String, items: [ImageItem])] = []
     private var scrollHandleHideTask: DispatchWorkItem?
     
-    // MARK: - public properties
+    // MARK: - properties
     
     // 選択モード
     public var isSelectMode = false {
@@ -42,6 +46,8 @@ class AllImageView: UIView {
             collectionView.reloadData()
         }
     }
+    // イベント通知用
+    var delegate: AllImageViewDelegate?
     
     // MARK: - lifecycle
     
@@ -236,6 +242,7 @@ extension AllImageView: UICollectionViewDataSource {
         if let cell = cell as? ImageItemCellView {
             let item = imageLists[indexPath.section].items[indexPath.row]
             cell.setupCell(image: item.image, price: item.price, section: indexPath.section, row: indexPath.row, isSelectMode: isSelectMode)
+            cell.delegate = self
         }
         
         return cell
@@ -296,5 +303,13 @@ extension AllImageView: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         return CGSize(width: bounds.width, height: Const.headerHeight)
+    }
+}
+
+// MARK: - ImageItemCellViewDelegate
+
+extension AllImageView: ImageItemCellViewDelegate {
+    func didTapImageCell(section: Int, row: Int) {
+        delegate?.didTapImageCell(section: section, row: row)
     }
 }

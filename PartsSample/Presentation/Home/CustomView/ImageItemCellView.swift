@@ -5,6 +5,10 @@
 
 import UIKit
 
+protocol ImageItemCellViewDelegate {
+    func didTapImageCell(section: Int, row: Int)
+}
+
 fileprivate struct Const {
     static let priceLabelHeight: CGFloat = 20
 }
@@ -21,6 +25,8 @@ class ImageItemCellView: UICollectionViewCell {
     private var section: Int!
     private var row: Int!
     
+    private var isAnimating = false
+    
     private var isChecked = false {
         didSet {
             if #available(iOS 13.0, *) {
@@ -32,6 +38,10 @@ class ImageItemCellView: UICollectionViewCell {
             }
         }
     }
+    
+    // MARK: - internal properties
+    
+    var delegate: ImageItemCellViewDelegate?
     
     // MARK: - lifecycle
     
@@ -48,33 +58,6 @@ class ImageItemCellView: UICollectionViewCell {
         super.layoutSubviews()
         
         setupLayout()
-    }
-
-    //
-    // セルタップでセルを縮小（凹んだように見せる）
-    //
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesBegan(touches, with: event)
-
-        UIView.animate(withDuration: 0.05) {
-            self.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
-        }
-    }
-
-    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesEnded(touches, with: event)
-        
-        UIView.animate(withDuration: 0.05) {
-            self.transform = CGAffineTransform(scaleX: 1, y: 1)
-        }
-    }
-
-    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-        super.touchesMoved(touches, with: event)
-        
-        UIView.animate(withDuration: 0.05) {
-            self.transform = CGAffineTransform(scaleX: 1, y: 1)
-        }
     }
 
     // MARK: - intarnal
@@ -96,6 +79,8 @@ class ImageItemCellView: UICollectionViewCell {
         self.row = row
         // 選択モード（チェックボックス表示）
         checkImageView.isHidden = !isSelectMode
+        // ボタンの活性・非活性（選択モードならボタンタップできる）
+        coverButton.isHidden = !isSelectMode
         // チェック状態
         isChecked = false
     }
@@ -125,6 +110,9 @@ private extension ImageItemCellView {
         coverButton.backgroundColor = .clear
         coverButton.addTarget(self, action: #selector(cellTapped), for: .touchUpInside)
         addSubview(coverButton)
+        // セルのタップ検出
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapGestureRecognize))
+        addGestureRecognizer(tapGesture)
     }
     
     func setupLayout() {
@@ -150,4 +138,21 @@ private extension ImageItemCellView {
         
         isChecked = !isChecked
     }
+    
+    @objc
+    func tapGestureRecognize(_ sender: UITapGestureRecognizer){
+        guard !isAnimating else { return }
+        isAnimating = true
+        
+        // 凹ますアニメーション
+        UIView.animate(withDuration: 0.1, animations: {
+            self.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+        }, completion: { _ in
+            self.transform = CGAffineTransform(scaleX: 1, y: 1)
+            self.isAnimating = false
+            
+            self.delegate?.didTapImageCell(section: self.section, row: self.row)
+        })
+    }
 }
+
