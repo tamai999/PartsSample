@@ -6,10 +6,6 @@
 import UIKit
 import SnapKit
 
-protocol ItemViewProtocol {
-    func didLoadImage(sender: ItemView)
-}
-
 fileprivate struct Const {
     static let imageCornerRadius: CGFloat = 4
 }
@@ -23,16 +19,6 @@ class ItemView: UIView {
     // 画像ロード後に画像のアスペクト比を維持した状態で、
     // 外側のビューの縦幅に合うように横幅の制約を更新するため、対象の制約を保持
     var widthConstraint: NSLayoutConstraint?
-    
-    var delegate: ItemViewProtocol?
-    
-    var imageAspect: CGFloat {
-        if let size = imageView.image?.size {
-            return size.width / size.height
-        } else {
-            return  1.0
-        }
-    }
     
     // MARK: - lifecycle
     
@@ -73,17 +59,27 @@ private extension ItemView {
     
     func setupLayout() {
         // 画像
-        setupImageViewLayout()
+        imageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+        setupImageViewAspet()
         // 価格
         priceLabel.snp.makeConstraints { make in
-            make.left.bottom.equalTo(self)
+            make.left.bottom.equalToSuperview()
         }
     }
     
-    func setupImageViewLayout() {
-        imageView.snp.makeConstraints { make in
-            make.top.left.right.bottom.equalTo(self)
+    func setupImageViewAspet() {
+        guard let image = imageView.image else { return }
+        
+        if let constraint = widthConstraint {
+            removeConstraint(constraint)
         }
+        
+        let aspectRatio = image.size.width / image.size.height
+        let widthConstraint = widthAnchor.constraint(equalTo: heightAnchor, multiplier: aspectRatio)
+        widthConstraint.isActive = true
+        self.widthConstraint = widthConstraint
     }
     
     func loadImage(name: String) {
@@ -92,18 +88,12 @@ private extension ItemView {
         // 擬似的にアイテムを遅延表示
         let loadTime = Double.random(in: 0.5 ..< 3)
         DispatchQueue.main.asyncAfter(deadline: .now() + loadTime) {
-            // 一旦、画像ボタンをレイアウトから外す
-            self.imageView.removeFromSuperview()
-            // 画像ボタンを作りレイアウトし直す
-            self.imageView = UIImageView()
+            // 画像を差し替える
             self.imageView.image = image
-            self.addSubview(self.imageView)
-            self.setupImageViewLayout()
+            self.setupImageViewAspet()
             // 価格を表示する
             self.bringSubviewToFront(self.priceLabel)
             self.priceLabel.isHidden = false
-
-            self.delegate?.didLoadImage(sender: self)
         }
     }
 }

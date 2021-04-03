@@ -141,7 +141,7 @@ private extension CarouselView {
         stackView.distribution = .equalSpacing
         stackView.spacing = Const.labelCarouselSpace
         stackView.snp.makeConstraints { make in
-            make.top.left.right.bottom.equalTo(self)
+            make.edges.equalToSuperview()
         }
         
         // タイトル
@@ -157,8 +157,8 @@ private extension CarouselView {
         
         // カルーセル領域。縦のサイズは横との比率で指定
         scrollView.snp.makeConstraints { make in
-            make.left.equalTo(self).offset(Const.scrollViewMargin)
-            make.right.equalTo(self).offset(-Const.scrollViewMargin)
+            make.left.equalToSuperview().offset(Const.scrollViewMargin)
+            make.right.equalToSuperview().offset(-Const.scrollViewMargin)
         }
         aspectConstraint = scrollView.heightAnchor.constraint(equalTo: scrollView.widthAnchor,
                                                               multiplier: type.aspectRatio(sizeClass: .unspecified))
@@ -180,36 +180,13 @@ private extension CarouselView {
         let itemView = ItemView(imageName: item.imageName,
                             price: item.price)
         itemStackView.addArrangedSubview(itemView)
-        itemView.delegate = self
         // レイアウト
-        itemView.translatesAutoresizingMaskIntoConstraints = false
-        itemView.heightAnchor.constraint(equalTo: itemStackView.heightAnchor).isActive = true
-        setupItemWidthLayout(itemView)
-    }
-    
-    func setupItemWidthLayout(_ item: ItemView) {
-        let widthConstraint = item.widthAnchor.constraint(equalTo: itemStackView.heightAnchor, multiplier: item.imageAspect)
-        widthConstraint.isActive = true
-        item.widthConstraint = widthConstraint
+        itemView.snp.makeConstraints { make in
+            make.height.equalTo(itemStackView)
+        }
     }
     
     @objc func didTapDetailButton(sender: Any) {
         delegate?.didTapDetailButton(carouselTag: carouselTag)
-    }
-}
-
-// MARK: - ItemViewProtocol
-
-extension CarouselView: ItemViewProtocol {
-    
-    func didLoadImage(sender: ItemView) {
-        // 画像のロードが完了したら画像のレイアウトの制約を貼り直す
-        DispatchQueue.main.async {
-            if let widthConstraint = sender.widthConstraint {
-                self.itemStackView.removeConstraint(widthConstraint)
-            }
-            
-            self.setupItemWidthLayout(sender)
-        }
     }
 }
