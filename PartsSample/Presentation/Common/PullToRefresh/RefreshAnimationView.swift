@@ -97,8 +97,9 @@ private extension RefreshAnimationView {
             self?.imageView.transform = CGAffineTransform(rotationAngle: CGFloat(CGFloat.pi / 2 * counter))
         }
         animator.addCompletion { [weak self] position in
-            if position == .end {
-                // アニメーションが終わったら、アニメーションを再設定し、スタートさせる
+            if position == .end, animator.isRunning {
+                // アニメーション動作継続中にアニメーション終了通知が来たら、アニメーションを再設定し、スタートさせる。
+                // アニメーション停止状態でアニメーション終了通知が来ることがあるので、その場合はアニメーションを再設定しないこと（無限ループしてしまう）
                 // （UIViewPropertyAnimatorでリピートさせる方法不明なため）
                 self?.setupAnimator()
                 self?.animator?.startAnimation()
