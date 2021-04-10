@@ -63,7 +63,8 @@ class ImageItemCellView: UICollectionViewCell {
         guard !isSelectMode else { return }
         // セルを凹ますアニメーション開始
         dentAnimator = UIViewPropertyAnimator(duration: 0.1, curve: .easeIn) {
-            self.transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+            let transform = CGAffineTransform(scaleX: 0.9, y: 0.9)
+            self.layer.sublayerTransform = CATransform3DMakeAffineTransform(transform)
         }
         dentAnimator?.startAnimation()
     }
@@ -87,12 +88,14 @@ class ImageItemCellView: UICollectionViewCell {
         if dentAnimator?.isRunning == .some(true) {
             // アニメーション中ならアニメーション終了後にセルサイズを元に戻すようにする
             dentAnimator?.addCompletion { _ in
-                self.transform = CGAffineTransform(scaleX: 1, y: 1)
+                let transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+                self.layer.sublayerTransform = CATransform3DMakeAffineTransform(transform)
             }
         } else {
             // 凹ますアニメーション完了後なら元にのサイズにするアニメーションを開始
             dentAnimator = UIViewPropertyAnimator(duration: 0.1, curve: .easeIn) {
-                self.transform = CGAffineTransform(scaleX: 1, y: 1)
+                let transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+                self.layer.sublayerTransform = CATransform3DMakeAffineTransform(transform)
             }
             dentAnimator?.startAnimation()
         }
