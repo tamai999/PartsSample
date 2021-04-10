@@ -40,9 +40,11 @@ class Page1ViewController: PageViewController {
 
 private extension Page1ViewController {
     func setupView() {
-        // ビューコントローラーのビューを差し替える
+        view.addSubview(page1View)
+        page1View.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         page1View.delegate = self
-        view = page1View
     }
     
     func updateView() {

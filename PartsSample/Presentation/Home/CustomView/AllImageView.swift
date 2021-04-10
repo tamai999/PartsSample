@@ -6,7 +6,7 @@
 import UIKit
 
 protocol AllImageViewDelegate {
-    func didTapImageCell(section: Int, row: Int)
+    func didTapImageCell(indexPath: IndexPath)
 }
 
 fileprivate struct Const {
@@ -32,14 +32,15 @@ class AllImageView: UIView {
     
     // MARK: - private properties
     
-    private let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
     private let scrollHandleView = UIView()
 
     private var imageLists: [(title: String, items: [ImageItem])] = []
     private var scrollHandleHideTask: DispatchWorkItem?
     
-    // MARK: - properties
-    
+    // MARK: - internal properties
+
+    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+
     // 選択モード
     public var isSelectMode = false {
         didSet {
@@ -221,7 +222,7 @@ extension AllImageView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         print("didSelectItemAt section[\(indexPath.section)] index [\(indexPath.row)]")
         if !isSelectMode {
-            delegate?.didTapImageCell(section: indexPath.section, row: indexPath.row)
+            delegate?.didTapImageCell(indexPath: indexPath)
         } else {
             guard let cell = collectionView.cellForItem(at: indexPath) as? ImageItemCellView else {
                 return
@@ -250,7 +251,7 @@ extension AllImageView: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: Const.cellReuseIdentifier, for: indexPath)
         if let cell = cell as? ImageItemCellView {
             let item = imageLists[indexPath.section].items[indexPath.row]
-            cell.setupCell(image: item.image, price: item.price, section: indexPath.section, row: indexPath.row, isSelectMode: isSelectMode)
+            cell.setupCell(image: item.image, price: item.price, isSelectMode: isSelectMode)
         }
         
         return cell

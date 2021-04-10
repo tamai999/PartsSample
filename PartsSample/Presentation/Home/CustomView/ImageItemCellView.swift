@@ -13,20 +13,17 @@ class ImageItemCellView: UICollectionViewCell {
     
     // MARK: - private properties
 
-    private let imageView = UIImageView()
     private let priceLabel = UILabel()
     private let checkImageView = UIImageView()
     
     private var dentAnimator: UIViewPropertyAnimator?
     
-    private var section: Int!
-    private var row: Int!
-    
     private var isSelectMode = false
-//    private var isAnimating = false
     
     // MARK: - internal properties
-    
+
+    let imageView = UIImageView()
+
     var isChecked = false {
         didSet {
             if #available(iOS 13.0, *) {
@@ -107,17 +104,12 @@ class ImageItemCellView: UICollectionViewCell {
     /// - Parameters:
     ///   - image: 画像
     ///   - price: 価格
-    ///   - section: コレクションビューのセクション
-    ///   - row: コレクションビューのセクション内順番
     ///   - isSelectMode: セルの選択モードか否か
-    public func setupCell(image: UIImage, price: Int, section: Int, row: Int, isSelectMode: Bool) {
+    public func setupCell(image: UIImage, price: Int, isSelectMode: Bool) {
         // 画像
         imageView.image = image
         // 価格
         priceLabel.text = " ¥\(price.withComma) "
-        // セルの位置
-        self.section = section
-        self.row = row
         // 選択モード（チェックボックス表示）
         self.isSelectMode = isSelectMode
         checkImageView.isHidden = !isSelectMode

@@ -5,7 +5,7 @@
 
 import UIKit
 
-/// ホーム画面のページ
+/// 画像一覧画面
 class AllImageViewController: UIViewController {
     
     // MARK: - private properties
@@ -16,6 +16,7 @@ class AllImageViewController: UIViewController {
     // MARK: - internal properties
     
     let allImageView = AllImageView()
+    var selectedCellIndex: IndexPath?
 
     // MARK: - lifecycle
     
@@ -56,10 +57,14 @@ class AllImageViewController: UIViewController {
     }
     
     // 画像詳細画面を表示する
-    func gotoImageDetailView(image: UIImage) {
+    func gotoImageDetailView(cell: IndexPath, image: UIImage) {
         DispatchQueue.main.async {
+            // 画面遷移アニメーションのため選択されたセルを保存し、アニメーションの基点とする
+            self.selectedCellIndex = cell
+            
             let vc = ImageDetailViewController(image: image)
-            vc.modalPresentationStyle = .fullScreen
+            vc.transitioningDelegate = self
+            vc.modalPresentationStyle = .custom
             self.present(vc, animated: true)
         }
     }
@@ -70,8 +75,10 @@ class AllImageViewController: UIViewController {
 private extension AllImageViewController {
     
     func setupView() {
-        // ビューを差し替える
-        view = allImageView
+        view.addSubview(allImageView)
+        allImageView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         allImageView.delegate = self
         // タイトル
         title = "タイプ [\(type.rawValue)]"
@@ -127,7 +134,34 @@ private extension AllImageViewController {
 // MARK: - AllImageViewDelegate
 
 extension AllImageViewController: AllImageViewDelegate {
-    func didTapImageCell(section: Int, row: Int) {
-        presenter.onImageTapped(section: section, row: row)
+    func didTapImageCell(indexPath: IndexPath) {
+        presenter.onImageTapped(indexPath: indexPath)
     }
 }
+
+// MARK: - UIViewControllerTransitioningDelegate
+
+extension AllImageViewController: UIViewControllerTransitioningDelegate {
+    
+    func animationController(forPresented presented: UIViewController, presenting: UIViewController, source: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        
+        guard let imageInfo = getImageInfo() else { return nil}
+        return ImageDetailAnimator(isPresenting: true, image: imageInfo.image, imageFrame: imageInfo.frame)
+    }
+
+    func animationController(forDismissed dismissed: UIViewController) -> UIViewControllerAnimatedTransitioning? {
+        
+        guard let imageInfo = getImageInfo() else { return nil}
+        return ImageDetailAnimator(isPresenting: false, image: imageInfo.image, imageFrame: imageInfo.frame)
+    }
+
+    // 遷移元の画像とフレームを取得
+    private func getImageInfo() -> (image: UIImage, frame: CGRect)? {
+        guard let index = selectedCellIndex,
+              let cell = allImageView.collectionView.cellForItem(at: index) as? ImageItemCellView,
+              let image = cell.imageView.image else { return nil }
+        let frame = cell.imageView.superview!.convert(cell.imageView.frame, to: self.view)
+        return (image, frame)
+    }
+}
+

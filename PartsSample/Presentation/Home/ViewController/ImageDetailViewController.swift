@@ -10,11 +10,11 @@ class ImageDetailViewController: UIViewController {
     
     // MARK: - private properties
     
-    private let imageView = UIImageView()
-    
     private let image: UIImage
     
-    
+    // MARK: - internal properties
+
+    let imageView = UIImageView()
     
     // MARK: - lifecycle
     init(image: UIImage) {
@@ -35,7 +35,9 @@ class ImageDetailViewController: UIViewController {
 // MARK: - private
 
 private extension ImageDetailViewController {
+    
     func setupView() {
+        view.backgroundColor = .black
         imageView.image = image
         imageView.contentMode = .scaleAspectFit
         view.addSubview(imageView)
@@ -48,8 +50,8 @@ private extension ImageDetailViewController {
     
     func setupLayout() {
         imageView.snp.makeConstraints { make in
-            make.width.equalToSuperview().multipliedBy(0.9)
-            make.height.equalToSuperview().multipliedBy(0.9)
+            make.width.equalToSuperview()
+            make.height.equalToSuperview()
             make.center.equalToSuperview()
         }
     }

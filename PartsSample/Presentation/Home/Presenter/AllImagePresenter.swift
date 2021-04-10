@@ -45,9 +45,11 @@ extension AllImagePresenter {
         setSelectModeView()
     }
     
-    func onImageTapped(section: Int, row: Int) {
+    func onImageTapped(indexPath: IndexPath) {
+        let section = indexPath.section
+        let row = indexPath.row
         guard section < lists.count, row < lists[section].1.count else { return }
-        viewController.gotoImageDetailView(image: lists[section].items[row].image)
+        viewController.gotoImageDetailView(cell: indexPath, image: lists[section].items[row].image)
     }
 }
 

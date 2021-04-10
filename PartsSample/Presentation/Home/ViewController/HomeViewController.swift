@@ -35,8 +35,10 @@ class HomeViewController: UIViewController {
 
 private extension HomeViewController {
     func setupView() {
-        // ビューを差し替える
-        view = homeView
+        view.addSubview(homeView)
+        homeView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
         // ビューからイベントを受け取る
         homeView.delegate = self
         
