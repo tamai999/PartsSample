@@ -41,6 +41,7 @@
 		97881A9B260F3915009C8925 /* CustomAlertAnimator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97881A9A260F3915009C8925 /* CustomAlertAnimator.swift */; };
 		97881A9F260F4703009C8925 /* CustomAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97881A9E260F4703009C8925 /* CustomAlertViewController.swift */; };
 		97881AA2260F4DBD009C8925 /* Page2ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97881AA1260F4DBD009C8925 /* Page2ViewController.swift */; };
+		978F53172622CC3700D181A3 /* UIPinchGestureRecognizer+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 978F53162622CC3700D181A3 /* UIPinchGestureRecognizer+Extension.swift */; };
 		979A1E8D2610906300537D75 /* HomeCategoryPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 979A1E8C2610906300537D75 /* HomeCategoryPresenter.swift */; };
 		979A1E932610A35A00537D75 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 979A1E922610A35A00537D75 /* README.md */; };
 		97B613E5260FF74B006F4F06 /* CustomAlertPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B613E4260FF74B006F4F06 /* CustomAlertPresentationController.swift */; };
@@ -86,6 +87,7 @@
 		97881A9A260F3915009C8925 /* CustomAlertAnimator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertAnimator.swift; sourceTree = "<group>"; };
 		97881A9E260F4703009C8925 /* CustomAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertViewController.swift; sourceTree = "<group>"; };
 		97881AA1260F4DBD009C8925 /* Page2ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page2ViewController.swift; sourceTree = "<group>"; };
+		978F53162622CC3700D181A3 /* UIPinchGestureRecognizer+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIPinchGestureRecognizer+Extension.swift"; sourceTree = "<group>"; };
 		979A1E8C2610906300537D75 /* HomeCategoryPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCategoryPresenter.swift; sourceTree = "<group>"; };
 		979A1E922610A35A00537D75 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		97B613E4260FF74B006F4F06 /* CustomAlertPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertPresentationController.swift; sourceTree = "<group>"; };
@@ -232,6 +234,7 @@
 			isa = PBXGroup;
 			children = (
 				97814ADE25FDE39C006BDF5F /* UIFont+Extension.swift */,
+				978F53162622CC3700D181A3 /* UIPinchGestureRecognizer+Extension.swift */,
 			);
 			path = UIKitExtension;
 			sourceTree = "<group>";
@@ -444,6 +447,7 @@
 				979A1E8D2610906300537D75 /* HomeCategoryPresenter.swift in Sources */,
 				970BB1D825FC7B7400F05F4F /* R.generated.swift in Sources */,
 				9729333D260424B800E989A8 /* CustomRefreshControl.swift in Sources */,
+				978F53172622CC3700D181A3 /* UIPinchGestureRecognizer+Extension.swift in Sources */,
 				970BB1F625FCAFE300F05F4F /* CarouselView.swift in Sources */,
 				97814AEB25FE1152006BDF5F /* HomePageViewController.swift in Sources */,
 				97293341260431F600E989A8 /* RefreshAnimationView.swift in Sources */,

@@ -17,15 +17,39 @@ fileprivate struct Const {
     static let scrollHandleHeight: CGFloat = 50
     static let scrollHandleRightPosition: CGFloat = 40
     static let scrollHandleCornerRadius: CGFloat = 15
-    // 並べるセルの数（ClassSize ＝ compact）
-    static let columnForCompactSize = 4
-    // 並べるセルの数（ClassSize ＝ regular）
-    static let columnForRegularSize = 8
     // セルのアスペクト比(height/width)
     static let cellAspectRatio: CGFloat = 1.2
     
     static let cellReuseIdentifier = "CellIdentifier"
     static let headerReuseIdentifier = "HeaderIdentifier"
+}
+
+// ピンチジェスチャで画像の数を増減するためのルール定義
+private enum CellHorizontalCount: Int {
+    case wide = 2, middle = 4, narrow = 8, superNarrow = 16
+    
+    func next(isZoom: Bool, isRegularSize: Bool) -> CellHorizontalCount {
+        switch self {
+        case .wide:
+            return isZoom ? .wide : .middle
+        case .middle:
+            if isRegularSize {
+                // レギュラーサイズはwide不可
+                return isZoom ? .middle : .narrow
+            } else {
+                return isZoom ? .wide : .narrow
+            }
+        case .narrow:
+            if isRegularSize {
+                // レギュラーサイズは superNarrow まで許可
+                return isZoom ? .middle : .superNarrow
+            } else {
+                return isZoom ? .middle : .narrow
+            }
+        case .superNarrow:
+            return isZoom ? .narrow : .superNarrow
+        }
+    }
 }
 
 class AllImageView: UIView {
@@ -36,6 +60,12 @@ class AllImageView: UIView {
 
     private var imageLists: [(title: String, items: [ImageItem])] = []
     private var scrollHandleHideTask: DispatchWorkItem?
+    
+    private var zoomingStatus: UIPinchGestureRecognizer.ZoomStatus = .zoomIn
+    private var pinchGesture: UIPinchGestureRecognizer?
+    private var transitionLayout: UICollectionViewTransitionLayout?
+    private var currentCellHorizontalCount: CellHorizontalCount = .middle
+    private var nextCellHorizontalCount: CellHorizontalCount?
     
     // MARK: - internal properties
 
@@ -68,6 +98,17 @@ class AllImageView: UIView {
         scrollHandleView.isHidden = true
     }
     
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        super.traitCollectionDidChange(previousTraitCollection)
+        
+        // 横に並べるセルのサイズを決める
+        if traitCollection.horizontalSizeClass == .regular {
+            currentCellHorizontalCount = .narrow
+        } else {
+            currentCellHorizontalCount = .middle
+        }
+    }
+    
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         if let touch = touches.first, touch.view == scrollHandleView {
             // スクロールする量を決めるため、まず、ビュー内のスクロール率を求める
@@ -76,8 +117,7 @@ class AllImageView: UIView {
             // スクロール範囲はビューの高さからセーフエリアとハンドルの高さを除いた範囲
             let viewSize = bounds.height - safeAreaInsets.top - Const.scrollHandleHeight - safeAreaInsets.bottom
             var ratio = locationY / viewSize
-            ratio = ratio < 0.0 ? 0.0 : ratio
-            ratio = ratio > 1.0 ? 1.0 : ratio
+            ratio = min(max(ratio, 0.0), 1.0)
             
             // コンテンツ全体の高さを求める
             let scrollSize = collectionView.contentSize.height
@@ -172,6 +212,10 @@ private extension AllImageView {
         scrollHandleView.isUserInteractionEnabled = true
         addSubview(scrollHandleView)
         scrollHandleView.isHidden = true    // 非表示にしておく
+        // 画像一覧の画像サイズ変更のためのピンチジェスチャ
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinchGesture(gesture:)))
+        collectionView.addGestureRecognizer(pinchGesture)
+        self.pinchGesture = pinchGesture
     }
     
     func setupLayout() {
@@ -179,6 +223,59 @@ private extension AllImageView {
         collectionView.snp.makeConstraints { make in
             make.top.left.right.equalTo(safeAreaLayoutGuide)
             make.bottom.equalToSuperview()
+        }
+    }
+    
+    @objc
+    func pinchGesture(gesture: UIPinchGestureRecognizer) {
+        
+        switch(gesture.state){
+        case .began:
+            // ピンチ操作を開始した時点で、拡大なのか縮小なのか、どちらの操作なのか決めて、ピンチ操作が完了するまでその状態を確認できるようにする
+            zoomingStatus = gesture.zoomStatus
+            
+            // 次のセルサイズを決める
+            if traitCollection.horizontalSizeClass == .regular {
+                nextCellHorizontalCount = currentCellHorizontalCount.next(isZoom: zoomingStatus == .zoomIn,
+                                                isRegularSize: true)
+            } else {
+                nextCellHorizontalCount = currentCellHorizontalCount.next(isZoom: zoomingStatus == .zoomIn,
+                                                isRegularSize: false)
+            }
+            
+            // Transitionする先のLayoutを用意
+            let nextLayout = UICollectionViewFlowLayout()            
+            // Transitionの開始
+            collectionView.startInteractiveTransition(to: nextLayout) { completed, finish in
+                self.pinchGesture?.isEnabled = true
+                self.nextCellHorizontalCount = nil
+            }
+            
+        case .changed:
+            // Transitionの進捗(progress)を0.0〜1.0で更新
+            guard let layout = collectionView.collectionViewLayout as? UICollectionViewTransitionLayout else { return }
+            layout.transitionProgress = gesture.transitionProgress(zoomStatus: zoomingStatus)
+            
+        case .ended:
+            // Transitionを完了
+            guard let layout = collectionView.collectionViewLayout as? UICollectionViewTransitionLayout else { return }
+
+            if layout.transitionProgress > 0.5 {
+                collectionView.finishInteractiveTransition()
+
+                if let next = nextCellHorizontalCount {
+                    currentCellHorizontalCount = next
+                    nextCellHorizontalCount = nil
+                }
+            } else {
+                nextCellHorizontalCount = nil
+                collectionView.cancelInteractiveTransition()
+            }
+            
+            // 最後のアニメーションが終わるまでジェスチャーを停止
+            pinchGesture?.isEnabled = false
+        default:
+            break;
         }
     }
 }
@@ -281,15 +378,19 @@ extension AllImageView: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-        // 横に並べるセルの数が一定になるようにセルサイズを計算する
-        var cellWidth = collectionView.frame.width - (Const.horizontalMargin * 2)
-        if traitCollection.horizontalSizeClass == .compact {
-            cellWidth /= CGFloat(Const.columnForCompactSize)
+        // 横に並べるセルの数を取得
+        let cellHorizontalCount: Int
+        if let next = nextCellHorizontalCount {
+            cellHorizontalCount = next.rawValue
         } else {
-            cellWidth /= CGFloat(Const.columnForRegularSize)
+            cellHorizontalCount = currentCellHorizontalCount.rawValue
         }
         
+        // 横に並べるセルの数が一定になるようにセルサイズを計算する
+        var cellWidth = collectionView.frame.width - (Const.horizontalMargin * 2)
+        cellWidth /= CGFloat(cellHorizontalCount)
         let cellHeight = cellWidth * Const.cellAspectRatio
+        
         return CGSize(width: cellWidth, height: cellHeight)
     }
     
