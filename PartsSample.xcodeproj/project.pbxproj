@@ -46,6 +46,10 @@
 		979A1E932610A35A00537D75 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 979A1E922610A35A00537D75 /* README.md */; };
 		97B613E5260FF74B006F4F06 /* CustomAlertPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B613E4260FF74B006F4F06 /* CustomAlertPresentationController.swift */; };
 		97B613F026102D4C006F4F06 /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97B613EF26102D4C006F4F06 /* BaseViewController.swift */; };
+		97CAB6BB262AC85A00E1FCBF /* common.metal in Sources */ = {isa = PBXBuildFile; fileRef = 97CAB6B7262AC85A00E1FCBF /* common.metal */; };
+		97CAB6BC262AC85A00E1FCBF /* ShaderArtView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97CAB6B9262AC85A00E1FCBF /* ShaderArtView.swift */; };
+		97CAB6C1262AC89400E1FCBF /* shader.metal in Sources */ = {isa = PBXBuildFile; fileRef = 97CAB6C0262AC89400E1FCBF /* shader.metal */; };
+		97CAB6C7262AC9FB00E1FCBF /* Page3ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97CAB6C6262AC9FB00E1FCBF /* Page3ViewController.swift */; };
 		97ECD6EE2605B4D400C46C5B /* HomeNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 97ECD6ED2605B4D400C46C5B /* HomeNavigationController.swift */; };
 /* End PBXBuildFile section */
 
@@ -92,6 +96,13 @@
 		979A1E922610A35A00537D75 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		97B613E4260FF74B006F4F06 /* CustomAlertPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertPresentationController.swift; sourceTree = "<group>"; };
 		97B613EF26102D4C006F4F06 /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		97CAB6B7262AC85A00E1FCBF /* common.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = common.metal; sourceTree = "<group>"; };
+		97CAB6B8262AC85A00E1FCBF /* shader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = shader.h; sourceTree = "<group>"; };
+		97CAB6B9262AC85A00E1FCBF /* ShaderArtView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ShaderArtView.swift; sourceTree = "<group>"; };
+		97CAB6BA262AC85A00E1FCBF /* common.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = common.h; sourceTree = "<group>"; };
+		97CAB6BE262AC86500E1FCBF /* Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Bridging-Header.h"; sourceTree = "<group>"; };
+		97CAB6C0262AC89400E1FCBF /* shader.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = shader.metal; sourceTree = "<group>"; };
+		97CAB6C6262AC9FB00E1FCBF /* Page3ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page3ViewController.swift; sourceTree = "<group>"; };
 		97ECD6ED2605B4D400C46C5B /* HomeNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNavigationController.swift; sourceTree = "<group>"; };
 		DC8B45FD2E58F99922D80ABE /* Pods-PartsSample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PartsSample.debug.xcconfig"; path = "Target Support Files/Pods-PartsSample/Pods-PartsSample.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -148,6 +159,7 @@
 				9722C8A825FF7BA90062EBBF /* PageViewController.swift */,
 				97814AEF25FE11E9006BDF5F /* Page1ViewController.swift */,
 				97881AA1260F4DBD009C8925 /* Page2ViewController.swift */,
+				97CAB6C6262AC9FB00E1FCBF /* Page3ViewController.swift */,
 				97814AF425FE122D006BDF5F /* PageNViewController.swift */,
 				974D34A72605FADD00E43A9C /* AllImageViewController.swift */,
 				972928B12614033E0060F222 /* ImageDetailViewController.swift */,
@@ -176,6 +188,7 @@
 		9729333B2604244600E989A8 /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				97CAB6B6262AC82400E1FCBF /* ShaderArtView */,
 				97B613F226102D5C006F4F06 /* BaseViewController */,
 				97881A99260F37D0009C8925 /* CustomAlert */,
 				97881A98260F3797009C8925 /* PullToRefresh */,
@@ -205,6 +218,7 @@
 			children = (
 				979A1E922610A35A00537D75 /* README.md */,
 				970BB1D725FC7B7400F05F4F /* R.generated.swift */,
+				97CAB6BE262AC86500E1FCBF /* Bridging-Header.h */,
 				9771678225FC77E20024B1D7 /* PartsSample */,
 				9771678125FC77E20024B1D7 /* Products */,
 				880578DB9061DFDF953E26B0 /* Pods */,
@@ -284,6 +298,18 @@
 				97B613EF26102D4C006F4F06 /* BaseViewController.swift */,
 			);
 			path = BaseViewController;
+			sourceTree = "<group>";
+		};
+		97CAB6B6262AC82400E1FCBF /* ShaderArtView */ = {
+			isa = PBXGroup;
+			children = (
+				97CAB6BA262AC85A00E1FCBF /* common.h */,
+				97CAB6B7262AC85A00E1FCBF /* common.metal */,
+				97CAB6C0262AC89400E1FCBF /* shader.metal */,
+				97CAB6B8262AC85A00E1FCBF /* shader.h */,
+				97CAB6B9262AC85A00E1FCBF /* ShaderArtView.swift */,
+			);
+			path = ShaderArtView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -427,9 +453,11 @@
 				970BB20025FCC97D00F05F4F /* DebugControllView.swift in Sources */,
 				975D671E2607324D000D7BF0 /* AllImageView.swift in Sources */,
 				97B613F026102D4C006F4F06 /* BaseViewController.swift in Sources */,
+				97CAB6BB262AC85A00E1FCBF /* common.metal in Sources */,
 				97814AF525FE122D006BDF5F /* PageNViewController.swift in Sources */,
 				9771678825FC77E20024B1D7 /* HomeViewController.swift in Sources */,
 				974D34A82605FADD00E43A9C /* AllImageViewController.swift in Sources */,
+				97CAB6BC262AC85A00E1FCBF /* ShaderArtView.swift in Sources */,
 				975D672326074492000D7BF0 /* AllImagePresenter.swift in Sources */,
 				97814B0725FE241E006BDF5F /* HomeView.swift in Sources */,
 				9771678425FC77E20024B1D7 /* AppDelegate.swift in Sources */,
@@ -441,10 +469,12 @@
 				97814AE525FDECEA006BDF5F /* Int+Extension.swift in Sources */,
 				9722C8A925FF7BA90062EBBF /* PageViewController.swift in Sources */,
 				97ECD6EE2605B4D400C46C5B /* HomeNavigationController.swift in Sources */,
+				97CAB6C7262AC9FB00E1FCBF /* Page3ViewController.swift in Sources */,
 				97B613E5260FF74B006F4F06 /* CustomAlertPresentationController.swift in Sources */,
 				97814B0225FE1C02006BDF5F /* PageSwitchView.swift in Sources */,
 				975D672C2607659C000D7BF0 /* ImageItemCellView.swift in Sources */,
 				979A1E8D2610906300537D75 /* HomeCategoryPresenter.swift in Sources */,
+				97CAB6C1262AC89400E1FCBF /* shader.metal in Sources */,
 				970BB1D825FC7B7400F05F4F /* R.generated.swift in Sources */,
 				9729333D260424B800E989A8 /* CustomRefreshControl.swift in Sources */,
 				978F53172622CC3700D181A3 /* UIPinchGestureRecognizer+Extension.swift in Sources */,
@@ -615,6 +645,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = net.sample.PartsSample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "${SRCROOT}/Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -638,6 +669,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = net.sample.PartsSample;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SWIFT_OBJC_BRIDGING_HEADER = "${SRCROOT}/Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

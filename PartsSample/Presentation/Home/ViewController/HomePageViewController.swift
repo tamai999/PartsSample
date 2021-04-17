@@ -18,7 +18,7 @@ class HomePageViewController: UIPageViewController {
     
     private let page1VC = Page1ViewController(pageIndex: 0)
     private let page2VC = Page2ViewController(pageIndex: 1)
-    private let page3VC = PageNViewController(pageIndex: 2)
+    private let page3VC = Page3ViewController(pageIndex: 2)
     private let page4VC = PageNViewController(pageIndex: 3)
     private let page5VC = PageNViewController(pageIndex: 4)
     
