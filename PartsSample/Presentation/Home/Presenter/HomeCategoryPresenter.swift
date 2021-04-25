@@ -47,4 +47,16 @@ extension HomeCategoryPresenter {
 
         page1View.addDebugView()
     }
+    
+    func onViewWillAppear() {
+        // リフレッシュコントロール初期化
+        viewController.page1View.resetRefreshControl()
+        // ナビゲーションバーは非表示
+        viewController.navigationController?.isNavigationBarHidden = true
+    }
+    
+    func onWillEnterForeground() {
+        // リフレッシュコントロール初期化
+        viewController.page1View.resetRefreshControl()
+    }
 }

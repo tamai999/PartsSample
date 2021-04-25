@@ -32,7 +32,13 @@ class Page1ViewController: PageViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        updateView()
+        presenter.onViewWillAppear()
+    }
+    
+    override func willEnterForeground() {
+        super.willEnterForeground()
+        
+        presenter.onWillEnterForeground()
     }
 }
 
@@ -45,13 +51,6 @@ private extension Page1ViewController {
             make.edges.equalToSuperview()
         }
         page1View.delegate = self
-    }
-    
-    func updateView() {
-        // リフレッシュコントロール初期化
-        page1View.resetRefreshControl()
-        // ナビゲーションバーは非表示
-        navigationController?.isNavigationBarHidden = true
     }
 }
 

@@ -21,6 +21,27 @@ class BaseViewController: UIViewController {
         cancelAllAlert()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // フォアグラウンドへの移行を監視
+        let notificationCenter = NotificationCenter.default
+        notificationCenter.addObserver(self,
+                                       selector: #selector(willEnterForeground),
+                                       name: UIApplication.willEnterForegroundNotification,
+                                       object: nil)
+    }
+    
+    @objc
+    func willEnterForeground() {
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        // 監視を解除
+        NotificationCenter.default.removeObserver(self)
+    }
     // MARK: - internal methods
     
     /// アラート表示。表示順はFIFO
