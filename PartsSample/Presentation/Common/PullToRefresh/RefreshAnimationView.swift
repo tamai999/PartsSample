@@ -11,7 +11,6 @@ class RefreshAnimationView: UIView {
 
     private let imageView = UIImageView()
     private var animator: UIViewPropertyAnimator?
-    private var animationCounter = 0
     
     var progress: CGFloat {
         didSet {
@@ -43,19 +42,18 @@ class RefreshAnimationView: UIView {
     /// アニメーション停止（終了アニメーション開始）
     func stop() {
         animator?.stopAnimation(true)
-        // 画像を小さくするアニメーションを行う
-        UIView.animate(withDuration: 0.2) {
-            self.imageView.bounds.size.width = 4.0
-            self.imageView.bounds.size.height = 4.0
+        // 画像を大きく透明にするアニメーションを行う
+        UIView.animate(withDuration: 0.3) {
+            self.imageView.transform = CGAffineTransform(scaleX: 100, y: 100)
+            self.imageView.alpha = 0.0
         }
     }
     
     /// アニメーションリセット
     func reset() {
         // アニメーションの状態を初期化する
-        imageView.bounds = CGRect(x: 0, y: 0, width: 44, height: 44)
-        imageView.transform = CGAffineTransform(rotationAngle: 0)
-        animationCounter = 0
+        imageView.alpha = 1.0
+        imageView.transform = .identity
         if case .some(.active) = animator?.state {
             // もしアニメーションがActiveだったら止める
             animator?.stopAnimation(true)
@@ -87,15 +85,20 @@ private extension RefreshAnimationView {
     func setupAnimator() {
         // 90度単位で回転アニメーションを繰り返す。
         // (アニメーションが逆回転しないように180度以上に設定しないほうが良いため）
-        imageView.transform = CGAffineTransform(rotationAngle: CGFloat.pi / 2 * CGFloat(animationCounter))
-        animationCounter += 1
-        
         let animator = UIViewPropertyAnimator(duration: 1.0,
-                                              timingParameters: UICubicTimingParameters(animationCurve: .linear))
-        let counter = CGFloat(animationCounter)
-        animator.addAnimations { [weak self] in
-            self?.imageView.transform = CGAffineTransform(rotationAngle: CGFloat(CGFloat.pi / 2 * counter))
-        }
+                                              timingParameters: UICubicTimingParameters(animationCurve: .easeIn))
+        animator.addAnimations({ [weak self] in
+            self?.imageView.transform = CGAffineTransform(rotationAngle: CGFloat(CGFloat.pi * 0.5))
+        }, delayFactor: 0.0)
+        animator.addAnimations({ [weak self] in
+            self?.imageView.transform = CGAffineTransform(rotationAngle: CGFloat(CGFloat.pi * 1.0))
+        }, delayFactor: 0.25)
+        animator.addAnimations({ [weak self] in
+            self?.imageView.transform = CGAffineTransform(rotationAngle: CGFloat(CGFloat.pi * 1.5))
+        }, delayFactor: 0.5)
+        animator.addAnimations({ [weak self] in
+            self?.imageView.transform = CGAffineTransform(rotationAngle: CGFloat(CGFloat.pi * 2.0))
+        }, delayFactor: 0.75)
         animator.addCompletion { [weak self] position in
             if position == .end, animator.isRunning {
                 // アニメーション動作継続中にアニメーション終了通知が来たら、アニメーションを再設定し、スタートさせる。
