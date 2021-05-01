@@ -7,6 +7,8 @@ import UIKit
 
 fileprivate struct Const {
     static let maxPullDistance: CGFloat = 150
+    // アニメーションビューがスクロールビューのコンテントの上に位置するようにするためのオフセット
+    static let animationViewYOffset: CGFloat = 60
 }
 
 class CustomRefreshControl: UIRefreshControl {
@@ -16,6 +18,7 @@ class CustomRefreshControl: UIRefreshControl {
     private let animationView = RefreshAnimationView()
     private var isAnimating = false
     private var isEndRefreshingCalled = false
+    private var animationViewYConstraint: NSLayoutConstraint?
     
     // MARK: - lifecycle
     
@@ -48,8 +51,13 @@ class CustomRefreshControl: UIRefreshControl {
         }
         
         if !isAnimating {
-            animationView.progress = min(abs(offsetY / Const.maxPullDistance), 1)
+            // インジケーター回転
+            let progress = min(abs(offsetY / Const.maxPullDistance), 1)
+            animationView.progress = progress
         }
+        
+        // インジケーター縦位置調整
+        animationViewYConstraint?.constant = -offsetY - Const.animationViewYOffset
     }
     
     /// リフレッシュ中でなければリフレッシュビューを初期化する
@@ -73,10 +81,9 @@ private extension CustomRefreshControl {
     
     func setupLayout() {
         animationView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            animationView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            animationView.centerYAnchor.constraint(equalTo: centerYAnchor),
-        ])
+        animationView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
+        animationViewYConstraint = animationView.centerYAnchor.constraint(equalTo: centerYAnchor)
+        animationViewYConstraint?.isActive = true
     }
     
     @objc func handleRefreshControl() {
