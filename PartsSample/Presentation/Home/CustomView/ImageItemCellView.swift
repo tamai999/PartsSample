@@ -13,8 +13,8 @@ class ImageItemCellView: UICollectionViewCell {
     
     // MARK: - private properties
 
-    private let priceLabel = UILabel()
-    private let checkImageView = UIImageView()
+    private weak var priceLabel: UILabel!
+    private weak var checkImageView: UIImageView!
     
     private var dentAnimator: UIViewPropertyAnimator?
     
@@ -22,7 +22,7 @@ class ImageItemCellView: UICollectionViewCell {
     
     // MARK: - internal properties
 
-    let imageView = UIImageView()
+    weak var imageView: UIImageView!
 
     var isChecked = false {
         didSet {
@@ -129,20 +129,28 @@ private extension ImageItemCellView {
     
     func setupView() {
         // 画像
-        addSubview(imageView)
+        let imageView = UIImageView()
+        contentView.addSubview(imageView)
+        self.imageView = imageView
         // 価格
+        let priceLabel = UILabel()
         priceLabel.textColor = .white
         priceLabel.font = UIFont.priceFont
         priceLabel.backgroundColor = UIColor.black.withAlphaComponent(0.5)
-        addSubview(priceLabel)
+        contentView.addSubview(priceLabel)
+        self.priceLabel = priceLabel
+
         // チェックイメージ
+        let checkImageView = UIImageView()
         if #available(iOS 13.0, *) {
+            let checkImageView = UIImageView()
             checkImageView.image = UIImage(systemName: "circle")
             checkImageView.tintColor = R.color.label()
         } else {
             checkImageView.backgroundColor = .red
         }
-        addSubview(checkImageView)
+        contentView.addSubview(checkImageView)
+        self.checkImageView = checkImageView
     }
     
     func setupLayout() {
