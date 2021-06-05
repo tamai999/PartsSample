@@ -63,13 +63,12 @@ private extension Page4ViewController {
         collectionView.backgroundColor = .clear
         view.addSubview(collectionView)
         self.collectionView = collectionView
-        
     }
     
     func setupLayout() {
-        collectionView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-        }
+        // コレクションビューのセーフエリア対応は自分で計算する
+        collectionView.insetsLayoutMarginsFromSafeArea = false
+        
         collectionViewLayout.minimumInteritemSpacing = Const.minimumInteritemSpacing
         collectionViewLayout.minimumLineSpacing = 2
         collectionViewLayout.sectionInset = UIEdgeInsets(top: Const.sectionTopMargin,
@@ -79,12 +78,18 @@ private extension Page4ViewController {
     }
     
     func updateLayout() {
-        var column = Int((view.frame.width - (Const.sectionSideMargin * 2) + Const.minimumInteritemSpacing) / (Const.cellMinimumWidth + Const.minimumInteritemSpacing))
+        // セーフエリア内にレイアウトする
+        let frame = view.bounds.inset(by: view.safeAreaInsets)
+        collectionView.frame = frame
+        // コレクションビューからレイアウトマージンとセクションインセット分差し引いた横幅を計算
+        // insetsLayoutMarginsFromSafeAreaをfalseに設定済みなので、layoutMargins はセーフエリアの影響をうけない。
+        let availableWidth = collectionView.bounds.inset(by: collectionView.layoutMargins).inset(by: collectionViewLayout.sectionInset).width
+        var column = Int((availableWidth + Const.minimumInteritemSpacing) / (Const.cellMinimumWidth + Const.minimumInteritemSpacing))
         if column == 0 {
             column = 1
         }
         
-        let cellWidth = (view.frame.width - (Const.sectionSideMargin * 2) - (Const.minimumInteritemSpacing * CGFloat(column - 1))) / CGFloat(column)
+        let cellWidth = (availableWidth - (Const.minimumInteritemSpacing * CGFloat(column - 1))) / CGFloat(column)
         let cellSize = CGSize(width: cellWidth, height: Const.cellHeight)
         
         collectionViewLayout.itemSize = cellSize

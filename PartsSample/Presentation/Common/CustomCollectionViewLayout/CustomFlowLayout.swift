@@ -102,7 +102,8 @@ private extension CustomFlowLayout {
     // セルの列の数
     private var numberOfColumns: Int {
         guard let collectionView = collectionView else { return 0 }
-        let availableWidth = collectionView.bounds.inset(by: collectionView.layoutMargins).width
+        // 注意。列数の計算はこのレイアウトを使うUICollectionViewの列数の計算（またはセルサイズ）と合わせる必要がある。
+        let availableWidth = collectionView.bounds.inset(by: collectionView.layoutMargins).inset(by: sectionInset).width
         let numberOfColumns = Int((availableWidth + minimumInteritemSpacing) / (itemSize.width + minimumInteritemSpacing))
         return numberOfColumns > 0 ? numberOfColumns : 1
     }
