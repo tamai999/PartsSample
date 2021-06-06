@@ -15,6 +15,8 @@
 		970BB1FB25FCB6FB00F05F4F /* Page1View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 970BB1FA25FCB6FA00F05F4F /* Page1View.swift */; };
 		970BB20025FCC97D00F05F4F /* DebugControllView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 970BB1FF25FCC97D00F05F4F /* DebugControllView.swift */; };
 		970BB20525FCD0FB00F05F4F /* ItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 970BB20425FCD0FB00F05F4F /* ItemView.swift */; };
+		971CBD26266C58D800CEE839 /* CustomPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971CBD25266C58D800CEE839 /* CustomPickerView.swift */; };
+		971CBD28266C664C00CEE839 /* UIViewController+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 971CBD27266C664C00CEE839 /* UIViewController+Extension.swift */; };
 		9722C8A925FF7BA90062EBBF /* PageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9722C8A825FF7BA90062EBBF /* PageViewController.swift */; };
 		9722C8C325FF87A90062EBBF /* NotificationName+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9722C8C225FF87A90062EBBF /* NotificationName+Extension.swift */; };
 		972928B22614033E0060F222 /* ImageDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 972928B12614033E0060F222 /* ImageDetailViewController.swift */; };
@@ -68,6 +70,8 @@
 		970BB1FA25FCB6FA00F05F4F /* Page1View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page1View.swift; sourceTree = "<group>"; };
 		970BB1FF25FCC97D00F05F4F /* DebugControllView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugControllView.swift; sourceTree = "<group>"; };
 		970BB20425FCD0FB00F05F4F /* ItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ItemView.swift; sourceTree = "<group>"; };
+		971CBD25266C58D800CEE839 /* CustomPickerView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPickerView.swift; sourceTree = "<group>"; };
+		971CBD27266C664C00CEE839 /* UIViewController+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+Extension.swift"; sourceTree = "<group>"; };
 		9722C8A825FF7BA90062EBBF /* PageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PageViewController.swift; sourceTree = "<group>"; };
 		9722C8C225FF87A90062EBBF /* NotificationName+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "NotificationName+Extension.swift"; sourceTree = "<group>"; };
 		972928B12614033E0060F222 /* ImageDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageDetailViewController.swift; sourceTree = "<group>"; };
@@ -206,6 +210,7 @@
 				97B613F226102D5C006F4F06 /* BaseViewController */,
 				97881A99260F37D0009C8925 /* CustomAlert */,
 				97881A98260F3797009C8925 /* PullToRefresh */,
+				971CBD25266C58D800CEE839 /* CustomPickerView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -264,6 +269,7 @@
 				97814ADE25FDE39C006BDF5F /* UIFont+Extension.swift */,
 				978F53162622CC3700D181A3 /* UIPinchGestureRecognizer+Extension.swift */,
 				9779518E266B30B00029A0FF /* UIView+Extension.swift */,
+				971CBD27266C664C00CEE839 /* UIViewController+Extension.swift */,
 			);
 			path = UIKitExtension;
 			sourceTree = "<group>";
@@ -476,6 +482,7 @@
 				97881A9B260F3915009C8925 /* CustomAlertAnimator.swift in Sources */,
 				970BB20025FCC97D00F05F4F /* DebugControllView.swift in Sources */,
 				975D671E2607324D000D7BF0 /* AllImageView.swift in Sources */,
+				971CBD26266C58D800CEE839 /* CustomPickerView.swift in Sources */,
 				97B613F026102D4C006F4F06 /* BaseViewController.swift in Sources */,
 				97CAB6BB262AC85A00E1FCBF /* common.metal in Sources */,
 				97814AF525FE122D006BDF5F /* PageNViewController.swift in Sources */,
@@ -499,6 +506,7 @@
 				97795193266B36790029A0FF /* SimpleCollectionViewHeader.swift in Sources */,
 				97B613E5260FF74B006F4F06 /* CustomAlertPresentationController.swift in Sources */,
 				97814B0225FE1C02006BDF5F /* PageSwitchView.swift in Sources */,
+				971CBD28266C664C00CEE839 /* UIViewController+Extension.swift in Sources */,
 				975D672C2607659C000D7BF0 /* ImageItemCellView.swift in Sources */,
 				979A1E8D2610906300537D75 /* HomeCategoryPresenter.swift in Sources */,
 				97CAB6C1262AC89400E1FCBF /* shader.metal in Sources */,
