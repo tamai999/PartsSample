@@ -31,14 +31,14 @@ class HomeNavigationController: UINavigationController {
 private extension HomeNavigationController {
     
     @objc func didChangeToDarkMode() {
-        if #available(iOS 13.0, *) {
-            overrideUserInterfaceStyle = .dark
+        if #available(iOS 13.0, *), let window = UIApplication.shared.keyWindow {
+            window.overrideUserInterfaceStyle = .dark
         }
     }
     
     @objc func didChangeToLightMode() {
-        if #available(iOS 13.0, *) {
-            overrideUserInterfaceStyle = .light
+        if #available(iOS 13.0, *), let window = UIApplication.shared.keyWindow {
+            window.overrideUserInterfaceStyle = .light
         }
     }
 }

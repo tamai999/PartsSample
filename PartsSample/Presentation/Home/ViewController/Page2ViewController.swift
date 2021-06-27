@@ -87,6 +87,13 @@ private extension Page2ViewController {
                                                           action: #selector(viewDidTap))
         
         maskView.addGestureRecognizer(tapGestureRecognizer)
+        
+        // ハーフモーダル表示ボタン
+        let showHalfModalButton = UIButton()
+        showHalfModalButton.setTitle("ハーフモーダル表示", for: .normal)
+        showHalfModalButton.setTitleColor(R.color.label(), for: .normal)
+        stackView.addArrangedSubview(showHalfModalButton)
+        showHalfModalButton.addTarget(self, action: #selector(showHalfModalTapped), for: .touchUpInside)
     }
     
     func setupLayout() {
@@ -144,6 +151,12 @@ private extension Page2ViewController {
             closePicker()
             maskView.isHidden = true
         }
+    }
+    
+    @objc
+    func showHalfModalTapped(_ sender: Any) {
+        let vc = SampleHalfModalViewController()
+        present(vc, animated: true, completion: nil)
     }
     
     func makePickerButtonTitle() -> String {
