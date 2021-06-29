@@ -15,7 +15,7 @@ class AllImageViewController: UIViewController {
 
     // MARK: - internal properties
     
-    let allImageView = AllImageView()
+    weak var allImageView: AllImageView!
     var selectedCellIndex: IndexPath?
 
     // MARK: - lifecycle
@@ -31,7 +31,7 @@ class AllImageViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupView()
+        setupViews()
         presenter.onViewDidLoad()
     }
     
@@ -74,8 +74,11 @@ class AllImageViewController: UIViewController {
 
 private extension AllImageViewController {
     
-    func setupView() {
+    func setupViews() {
+        let allImageView = AllImageView()
         view.addSubview(allImageView)
+        self.allImageView = allImageView
+        
         allImageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }

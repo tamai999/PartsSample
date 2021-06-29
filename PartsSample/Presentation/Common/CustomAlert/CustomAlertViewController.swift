@@ -7,7 +7,7 @@ import UIKit
 
 fileprivate struct Const {
     static let alertFrameViewWidth: CGFloat = 300
-    static let alertFrameViewHeght: CGFloat = 200
+    static let alertFrameViewHeight: CGFloat = 200
     static let alertFrameViewAnimationStartOffset: CGFloat = 50
     static let alertFrameViewCornerRadius: CGFloat = 10.0
     
@@ -23,15 +23,18 @@ class CustomAlertViewController: UIViewController {
     
     // MARK: - private properties
     
-    private let alertFrameView = UIView()
-    private let messageLabel = UILabel()
-    private let closeButton = UIButton()
-    private let leftButton = UIButton()
-    private let rightButton = UIButton()
+    private weak var alertFrameView: UIView!
+    private weak var messageLabel: UILabel!
+    private weak var closeButton: UIButton!
+    private weak var leftButton: UIButton!
+    private weak var rightButton: UIButton!
 
     private var buttonLayout: ButtonLayout = .close
     private var leftButtonProcess: (()->())?
     private var rightButtonProcess: (()->())?
+    private var message = ""
+    private var leftButtonTitle = ""
+    private var rightButtonTitle = ""
 
     // MARK: - internal properties
 
@@ -41,7 +44,7 @@ class CustomAlertViewController: UIViewController {
     // MARK: - lifecycle
     
     init(message: String) {
-        messageLabel.text = message
+        self.message = message
         
         super.init(nibName: nil, bundle: nil)
 
@@ -56,12 +59,11 @@ class CustomAlertViewController: UIViewController {
                   rightButtonProcess: @escaping ()->()) {
         
         buttonLayout = .leftRight
-        messageLabel.text = message
-        
-        leftButton.setTitle(leftButtonTitle, for: .normal)
+
+        self.message = message
+        self.leftButtonTitle = leftButtonTitle
         self.leftButtonProcess = leftButtonProcess
-        
-        rightButton.setTitle(rightButtonTitle, for: .normal)
+        self.rightButtonTitle = rightButtonTitle
         self.rightButtonProcess = rightButtonProcess
         
         super.init(nibName: nil, bundle: nil)
@@ -77,47 +79,60 @@ class CustomAlertViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupView()
-        setupLayout()
+        setupViews()
+        layoutViews()
     }
 }
 
 // MARK: - private
 
 private extension CustomAlertViewController {
-    func setupView() {
+    func setupViews() {
         // 背景
         view.backgroundColor = .clear
         // アラートの枠
+        let alertFrameView = UIView()
         alertFrameView.backgroundColor = .lightGray
         alertFrameView.layer.cornerRadius = Const.alertFrameViewCornerRadius
         view.addSubview(alertFrameView)
+        self.alertFrameView = alertFrameView
         // メッセージ
+        let messageLabel = UILabel()
+        messageLabel.text = message
         messageLabel.numberOfLines = 0
         alertFrameView.addSubview(messageLabel)
+        self.messageLabel = messageLabel
         
         if buttonLayout == .leftRight {
             // 左ボタン
+            let leftButton = UIButton()
+            leftButton.setTitle(leftButtonTitle, for: .normal)
             leftButton.addTarget(self, action: #selector(leftButtonTapped), for: .touchUpInside)
             alertFrameView.addSubview(leftButton)
+            self.leftButton = leftButton
 
             // 右ボタン
+            let rightButton = UIButton()
+            rightButton.setTitle(rightButtonTitle, for: .normal)
             rightButton.addTarget(self, action: #selector(rightButtonTapped), for: .touchUpInside)
             alertFrameView.addSubview(rightButton)
+            self.rightButton = rightButton
 
         } else {
             // 閉じるボタン
+            let closeButton = UIButton()
             closeButton.setTitle(Const.closeButtonText, for: .normal)
             closeButton.addTarget(self, action: #selector(closeButtonTapped), for: .touchUpInside)
             alertFrameView.addSubview(closeButton)
+            self.closeButton = closeButton
         }
     }
     
-    func setupLayout() {
+    func layoutViews() {
         // アラートの枠
         alertFrameView.snp.makeConstraints { make in
             make.width.equalTo(Const.alertFrameViewWidth)
-            make.height.equalTo(Const.alertFrameViewHeght)
+            make.height.equalTo(Const.alertFrameViewHeight)
             make.centerX.equalToSuperview()
         }
         centerYConstraint = alertFrameView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: Const.alertFrameViewAnimationStartOffset)

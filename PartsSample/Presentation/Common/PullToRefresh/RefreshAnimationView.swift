@@ -9,7 +9,7 @@ class RefreshAnimationView: UIView {
     
     // MARK: - private properties
 
-    private let imageView = UIImageView()
+    private weak var imageView: UIImageView!
     private var animator: UIViewPropertyAnimator?
     
     var progress: CGFloat {
@@ -25,7 +25,7 @@ class RefreshAnimationView: UIView {
         progress = 0.0
         super.init(frame: .zero)
         
-        setupView()
+        setupViews()
         setupAnimator()
     }
     
@@ -66,10 +66,11 @@ class RefreshAnimationView: UIView {
 
 private extension RefreshAnimationView {
     
-    func setupView() {
+    func setupViews() {
         backgroundColor = .clear
         
         // アニメーションビュー
+        let imageView = UIImageView()
         imageView.bounds = CGRect(x: 0, y: 0, width: 44, height: 44)
         if #available(iOS 13.0, *) {
             imageView.backgroundColor = .clear
@@ -80,6 +81,7 @@ private extension RefreshAnimationView {
             imageView.backgroundColor = .red
         }
         addSubview(imageView)
+        self.imageView = imageView
     }
     
     func setupAnimator() {

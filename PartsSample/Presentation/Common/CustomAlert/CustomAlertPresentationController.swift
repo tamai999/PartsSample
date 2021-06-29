@@ -14,7 +14,7 @@ class CustomAlertPresentationController: UIPresentationController {
     // MARK: - private properties
     
     /// 呼び出し元のViewControllerの上に重ねるオーバーレイ
-    private let overlayView = UIView()
+    private weak var overlayView: UIView!
 }
 
 // MARK: - UIPresentationController
@@ -26,9 +26,11 @@ extension CustomAlertPresentationController {
         super.presentationTransitionWillBegin()
 
         // カスタムビュー（グレーの透過ビュー）
+        let overlayView = UIView()
         overlayView.backgroundColor = .black
         overlayView.alpha = 0.0
         containerView?.insertSubview(overlayView, at: 0)
+        self.overlayView = overlayView
         presentedViewController.transitionCoordinator?.animate(alongsideTransition: { [unowned self] _ in
             self.overlayView.alpha = Const.overlayViewAlpha
         })

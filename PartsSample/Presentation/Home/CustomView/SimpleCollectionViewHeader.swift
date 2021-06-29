@@ -21,8 +21,8 @@ class SimpleCollectionViewHeader: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: .zero)
         
-        setupView()
-        setupLayout()
+        setupViews()
+        layoutViews()
     }
     
     required init?(coder: NSCoder) {
@@ -33,7 +33,7 @@ class SimpleCollectionViewHeader: UICollectionReusableView {
 // MARK: - private
 
 private extension SimpleCollectionViewHeader {
-    func setupView() {
+    func setupViews() {
         let text = UILabel()
         if #available(iOS 13.0, *) {
             text.textColor = UIColor.label
@@ -46,7 +46,7 @@ private extension SimpleCollectionViewHeader {
         self.text = text
     }
     
-    func setupLayout() {
+    func layoutViews() {
         text.snp.makeConstraints { make in
             make.left.equalToSuperview().offset(Const.labelSideMargin)
             make.right.equalToSuperview().offset(-Const.labelSideMargin)

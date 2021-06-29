@@ -14,7 +14,7 @@ class ImageDetailViewController: UIViewController {
     
     // MARK: - internal properties
 
-    let imageView = UIImageView()
+    weak var imageView: UIImageView!
     
     // MARK: - lifecycle
     init(image: UIImage) {
@@ -27,8 +27,8 @@ class ImageDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupView()
-        setupLayout()
+        setupViews()
+        layoutViews()
     }
 }
 
@@ -36,11 +36,14 @@ class ImageDetailViewController: UIViewController {
 
 private extension ImageDetailViewController {
     
-    func setupView() {
+    func setupViews() {
         view.backgroundColor = .black
+        
+        let imageView = UIImageView()
         imageView.image = image
         imageView.contentMode = .scaleAspectFit
         view.addSubview(imageView)
+        self.imageView = imageView
         
         // 上下のスワイプジェスチャー
         let swipeGesture = UISwipeGestureRecognizer(target: self, action:#selector(swiped))
@@ -48,7 +51,7 @@ private extension ImageDetailViewController {
         view.addGestureRecognizer(swipeGesture)
     }
     
-    func setupLayout() {
+    func layoutViews() {
         imageView.snp.makeConstraints { make in
             make.width.equalToSuperview()
             make.height.equalToSuperview()

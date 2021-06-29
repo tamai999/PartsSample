@@ -15,7 +15,7 @@ class CustomRefreshControl: UIRefreshControl {
     
     // MARK: - private properties
 
-    private let animationView = RefreshAnimationView()
+    private weak var animationView: RefreshAnimationView!
     private var isAnimating = false
     private var isEndRefreshingCalled = false
     private var animationViewYConstraint: NSLayoutConstraint?
@@ -25,8 +25,8 @@ class CustomRefreshControl: UIRefreshControl {
     override init() {
         super.init(frame: .zero)
         
-        setupView()
-        setupLayout()
+        setupViews()
+        layoutViews()
     }
     
     required init?(coder aDecoder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -71,15 +71,17 @@ class CustomRefreshControl: UIRefreshControl {
 // MARK: - private
 
 private extension CustomRefreshControl {
-    func setupView() {
+    func setupViews() {
         // デフォルトのインジケーターが見えないようにする
         tintColor = .clear
         // カスタムインジケーター
-        addSubview(animationView)
+        let animationView = RefreshAnimationView()
         addTarget(self, action: #selector(handleRefreshControl), for: .valueChanged)
+        addSubview(animationView)
+        self.animationView = animationView
     }
     
-    func setupLayout() {
+    func layoutViews() {
         animationView.translatesAutoresizingMaskIntoConstraints = false
         animationView.centerXAnchor.constraint(equalTo: centerXAnchor).isActive = true
         animationViewYConstraint = animationView.centerYAnchor.constraint(equalTo: centerYAnchor)

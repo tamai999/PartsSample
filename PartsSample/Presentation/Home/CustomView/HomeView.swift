@@ -21,8 +21,8 @@ class HomeView: UIView {
     
     // MARK: - private properties
     
-    private let headerView = SearchHeaderView(frame: CGRect.zero)
-    private let pageSwitchView = PageSwitchView(pageNames: ["ページ１", "ページ２", "ページ３", "ページ４", "ページ５"])
+    private weak var headerView: SearchHeaderView!
+    private weak var pageSwitchView: PageSwitchView!
     
     // MARK: - internal properties
     
@@ -32,8 +32,8 @@ class HomeView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        setupView()
-        setupLayout()
+        setupViews()
+        layoutViews()
     }
     
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -61,16 +61,20 @@ class HomeView: UIView {
 
 private extension HomeView {
     
-    func setupView() {
+    func setupViews() {
         backgroundColor = R.color.background()
         // ヘッダービュー
+        let headerView = SearchHeaderView(frame: CGRect.zero)
         addSubview(headerView)
+        self.headerView = headerView
         // ページ切り替えビュー
+        let pageSwitchView = PageSwitchView(pageNames: ["ページ１", "ページ２", "ページ３", "ページ４", "ページ５"])
         pageSwitchView.delegate = self
         addSubview(pageSwitchView)
+        self.pageSwitchView = pageSwitchView
     }
     
-    func setupLayout() {
+    func layoutViews() {
         // ヘッダービュー
         headerView.snp.makeConstraints { make in
             make.top.left.right.equalTo(self)

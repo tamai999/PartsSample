@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		645394EA4E0BA397F339B1FD /* Pods_PartsSample.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2BD96D293E0072F6935D4075 /* Pods_PartsSample.framework */; };
+		1965B60F8BC9515A8A6127EF /* libPods-PartsSample.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C489515E22B29534F9787FA4 /* libPods-PartsSample.a */; };
 		970BB1D825FC7B7400F05F4F /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = 970BB1D725FC7B7400F05F4F /* R.generated.swift */; };
 		970BB1EC25FC7C7B00F05F4F /* SearchHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 970BB1EB25FC7C7B00F05F4F /* SearchHeaderView.swift */; };
 		970BB1F125FCA7B000F05F4F /* BannerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 970BB1F025FCA7B000F05F4F /* BannerView.swift */; };
@@ -66,7 +66,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		2BD96D293E0072F6935D4075 /* Pods_PartsSample.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PartsSample.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7479E4A681B0412082F2DFE4 /* Pods-PartsSample.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PartsSample.release.xcconfig"; path = "Target Support Files/Pods-PartsSample/Pods-PartsSample.release.xcconfig"; sourceTree = "<group>"; };
 		970BB1D725FC7B7400F05F4F /* R.generated.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = R.generated.swift; sourceTree = "<group>"; };
 		970BB1EB25FC7C7B00F05F4F /* SearchHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchHeaderView.swift; sourceTree = "<group>"; };
@@ -128,6 +127,7 @@
 		97E90843264F477D005A3CE8 /* Page4ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Page4ViewController.swift; sourceTree = "<group>"; };
 		97E99C28267F745800515937 /* SampleHalfModalViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SampleHalfModalViewController.swift; sourceTree = "<group>"; };
 		97ECD6ED2605B4D400C46C5B /* HomeNavigationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeNavigationController.swift; sourceTree = "<group>"; };
+		C489515E22B29534F9787FA4 /* libPods-PartsSample.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-PartsSample.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		DC8B45FD2E58F99922D80ABE /* Pods-PartsSample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PartsSample.debug.xcconfig"; path = "Target Support Files/Pods-PartsSample/Pods-PartsSample.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -136,7 +136,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				645394EA4E0BA397F339B1FD /* Pods_PartsSample.framework in Frameworks */,
+				1965B60F8BC9515A8A6127EF /* libPods-PartsSample.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -155,7 +155,7 @@
 		911E1AF2A9A0E3BB9ADCC3CE /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				2BD96D293E0072F6935D4075 /* Pods_PartsSample.framework */,
+				C489515E22B29534F9787FA4 /* libPods-PartsSample.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -376,7 +376,6 @@
 				9771677C25FC77E20024B1D7 /* Sources */,
 				9771677D25FC77E20024B1D7 /* Frameworks */,
 				9771677E25FC77E20024B1D7 /* Resources */,
-				D0C9811EE7F9B139D2143A6A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -447,28 +446,11 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				$SRCROOT/R.generated.swift,
+				"$SRCROOT/R.generated.swift",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT/R.generated.swift\"\n";
-		};
-		D0C9811EE7F9B139D2143A6A /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PartsSample/Pods-PartsSample-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-PartsSample/Pods-PartsSample-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-PartsSample/Pods-PartsSample-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
 		};
 		D746390A2322147D6ED7156D /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;

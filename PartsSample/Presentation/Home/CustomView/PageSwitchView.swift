@@ -24,11 +24,10 @@ class PageSwitchView: UIView {
     
     // MARK: - private properties
     
-    private let scrollView = UIScrollView()
-    private let pageStackView = UIStackView()
-    private var pageButtons: [UIButton] = []
-    private let pageIndicator = UIView()
-    private var pageIndicatorXConstraint: NSLayoutConstraint?
+    private weak var scrollView: UIScrollView!
+    private weak var pageStackView: UIStackView!
+    private weak var pageIndicator: UIView!
+    private weak var pageIndicatorXConstraint: NSLayoutConstraint?
     private var pageNames: [String] = []
     
     // MARK: - internal properties
@@ -44,15 +43,17 @@ class PageSwitchView: UIView {
         
         self.pageNames = pageNames
         
-        setupView()
-        setupLayout()
+        setupViews()
+        layoutViews()
     }
     
     override func layoutSubviews() {
         super.layoutSubviews()
-        if bounds.width > (Const.pageLabelWidth * CGFloat(pageButtons.count)) {
+        // ページスタックビューの横幅を計算する
+        let pageStackViewWidth = Const.pageLabelWidth * CGFloat(pageStackView.arrangedSubviews.count)
+        if bounds.width > pageStackViewWidth {
             // ページスイッチの表示幅より画面幅が大きければ、スクロール位置を中央にしておく
-            let offsetX = self.scrollView.bounds.width / 2 - self.pageStackView.bounds.width / 2
+            let offsetX = self.scrollView.bounds.width / 2 - pageStackViewWidth / 2
             self.scrollView.setContentOffset(CGPoint(x: -offsetX, y: 0), animated: false)
         }
         // 子ビューのレイアウトが終わったらスクロール位置を再設定するようにレイアウトし直す
@@ -64,9 +65,9 @@ class PageSwitchView: UIView {
     /// ページ切り替えビューの表示ページを変更する（適宜スクロールする）
     /// - Parameter index: ページ番号(0~)
     func updatePageIndex(_ index: Int) {
-        guard index < pageButtons.count else { return }
+        guard index < pageStackView.arrangedSubviews.count else { return }
         
-        let buttonWidth = scrollView.contentSize.width / CGFloat(pageButtons.count)
+        let buttonWidth = scrollView.contentSize.width / CGFloat(pageStackView.arrangedSubviews.count)
         if scrollView.bounds.width < scrollView.contentSize.width {
             // ページのラベルをスクロール
             
@@ -103,13 +104,17 @@ class PageSwitchView: UIView {
 // MARK: - private
 
 private extension PageSwitchView {
-    private func setupView() {
+    private func setupViews() {
         // スクロールビュー
+        let scrollView = UIScrollView()
         scrollView.backgroundColor = R.color.carouselBackground()
         scrollView.showsHorizontalScrollIndicator = false
         addSubview(scrollView)
+        self.scrollView = scrollView
         // スクロールビュー内スタックビュー
+        let pageStackView = UIStackView()
         scrollView.addSubview(pageStackView)
+        self.pageStackView = pageStackView
         // ページ切り替えボタン
         pageNames.enumerated().forEach() { page in
             // ボタン生成
@@ -119,16 +124,17 @@ private extension PageSwitchView {
             button.titleLabel?.font = UIFont.pageSwitcherFont
             button.setTitleColor(R.color.label(), for: .normal)
             button.addTarget(self, action: #selector(didTapPageButton), for: .touchUpInside)
-            pageButtons.append(button)
             
             pageStackView.addArrangedSubview(button)
         }
         // ページのインジケーター
+        let pageIndicator = UIView()
         pageIndicator.backgroundColor = R.color.pageSelected()
         scrollView.addSubview(pageIndicator)
+        self.pageIndicator = pageIndicator
     }
     
-    func setupLayout() {
+    func layoutViews() {
         // ページ切り替えスクロールビュー
         scrollView.snp.makeConstraints { make in
             make.top.left.right.equalTo(self)
@@ -146,7 +152,7 @@ private extension PageSwitchView {
         }
         
         // ページ切り替えボタン
-        pageButtons.forEach() { button in
+        pageStackView.arrangedSubviews.forEach() { button in
             button.snp.makeConstraints { make in
                 make.width.equalTo(Const.pageLabelWidth)
             }

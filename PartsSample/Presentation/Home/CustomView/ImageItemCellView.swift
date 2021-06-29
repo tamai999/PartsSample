@@ -41,8 +41,8 @@ class ImageItemCellView: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: .zero)
         
-        setupView()
-        setupLayout()
+        setupViews()
+        layoutViews()
     }
     
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -50,7 +50,7 @@ class ImageItemCellView: UICollectionViewCell {
     override func layoutSubviews() {
         super.layoutSubviews()
         
-        setupLayout()
+        layoutViews()
     }
 
     //
@@ -127,7 +127,7 @@ class ImageItemCellView: UICollectionViewCell {
 
 private extension ImageItemCellView {
     
-    func setupView() {
+    func setupViews() {
         // 画像
         let imageView = UIImageView()
         contentView.addSubview(imageView)
@@ -153,7 +153,7 @@ private extension ImageItemCellView {
         self.checkImageView = checkImageView
     }
     
-    func setupLayout() {
+    func layoutViews() {
         // 画像
         imageView.contentMode = .scaleAspectFit
         imageView.frame = bounds

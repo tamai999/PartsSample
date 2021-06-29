@@ -6,7 +6,7 @@
 import UIKit
 
 enum ContentCategory: Int {
-    case category1 = 1, cateogry2, category3, category4, category5
+    case category1 = 1, category2, category3, category4, category5
 }
 
 /// ホーム画面の１ページ目
@@ -18,14 +18,14 @@ class Page1ViewController: PageViewController {
 
     // MARK: - internal properties
     
-    var page1View = Page1View()
+    weak var page1View: Page1View!
     
     // MARK: - lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupView()
+        setupViews()
         presenter.onViewDidLoad()
     }
 
@@ -45,8 +45,11 @@ class Page1ViewController: PageViewController {
 // MARK: - private
 
 private extension Page1ViewController {
-    func setupView() {
+    func setupViews() {
+        let page1View = Page1View()
         view.addSubview(page1View)
+        self.page1View = page1View
+        
         page1View.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }

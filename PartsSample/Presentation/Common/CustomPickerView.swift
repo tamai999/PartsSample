@@ -12,7 +12,7 @@ fileprivate struct Const {
 class CustomPickerView: UIView {
     // MARK: - private properties
     
-    private weak var pickerView: UIPickerView?
+    private weak var pickerView: UIPickerView!
     private var selectedRow: Int = 0
     private var data: [(value:Int, title: String)] = []
     
@@ -25,7 +25,7 @@ class CustomPickerView: UIView {
     init() {
         super.init(frame: .zero)
         
-        setupView()
+        setupViews()
     }
     
     required init?(coder: NSCoder) {
@@ -40,17 +40,15 @@ class CustomPickerView: UIView {
         self.data = data
         self.selectedRow = selectedRow
         
-        if let pickerView = pickerView {
-            pickerView.reloadAllComponents()
-            pickerView.selectRow(selectedRow, inComponent: 0, animated: false)
-        }
+        pickerView.reloadAllComponents()
+        pickerView.selectRow(selectedRow, inComponent: 0, animated: false)
     }
 }
 
 // MARK: - private
 
 private extension CustomPickerView {
-    func setupView() {
+    func setupViews() {
         backgroundColor = .clear
         // ブラー
         let blurEffect: UIBlurEffect
@@ -63,6 +61,7 @@ private extension CustomPickerView {
         visualEffectView.frame = bounds
         addSubview(visualEffectView)
         visualEffectView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
         // ツールバー
         let toolBar = UIToolbar()
         var toolBarFrame = bounds
@@ -86,6 +85,7 @@ private extension CustomPickerView {
         // AutoLayoutのワーニングが出るのでupdateConstraintsIfNeeded()しておく
         // https://developer.apple.com/forums/thread/121474
         toolBar.updateConstraintsIfNeeded()
+        
         // ピッカー
         let picker = UIPickerView()
         picker.selectRow(selectedRow, inComponent: 0, animated: false)

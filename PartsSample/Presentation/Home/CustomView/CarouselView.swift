@@ -29,11 +29,11 @@ fileprivate struct Const {
 class CarouselView: UIView {
     
     // MARK: - private properties
-    private let stackView = UIStackView()
-    private let titleLabel = UILabel()
-    private let detailButton = UIButton()
-    private let scrollView = UIScrollView()
-    private let itemStackView = UIStackView()
+    private weak var stackView: UIStackView!
+    private weak var titleLabel: UILabel!
+    private weak var detailButton: UIButton!
+    private weak var scrollView: UIScrollView!
+    private weak var itemStackView: UIStackView!
     
     private var aspectConstraint: NSLayoutConstraint?
     
@@ -67,13 +67,12 @@ class CarouselView: UIView {
     // MARK: - lifecycle
     init(title: String, size: CarouseSize, tag: Int) {
         super.init(frame: CGRect.zero)
-
-        titleLabel.text = title
+        
+        setupViews(title: title)
+        setupLayout(size)
+        
         self.size = size
         carouselTag = tag
-        
-        setupView()
-        setupLayout(size)
     }
     
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -112,26 +111,38 @@ class CarouselView: UIView {
 
 private extension CarouselView {
     
-    func setupView() {
+    func setupViews(title: String) {
         layer.masksToBounds = true
         // レイアウト
-        addSubview(stackView)
+        let stackView = UIStackView()
         stackView.backgroundColor = R.color.carouselBackground()
+        addSubview(stackView)
+        self.stackView = stackView
         // タイトル
-        stackView.addArrangedSubview(titleLabel)
+        let titleLabel = UILabel()
+        titleLabel.text = title
         titleLabel.backgroundColor = R.color.carouselBackground()
         titleLabel.textColor = R.color.label()
         titleLabel.font = UIFont.titleFont
+        stackView.addArrangedSubview(titleLabel)
+        self.titleLabel = titleLabel
         // すてべ見る
-        addSubview(detailButton)
+        let detailButton = UIButton()
         detailButton.setTitle("すべて見る", for: .normal)
         detailButton.titleLabel?.font = UIFont.linkFont
         detailButton.setTitleColor(R.color.linkText(), for: .normal)
         detailButton.addTarget(self, action: #selector(didTapDetailButton), for: .touchUpInside)
+        addSubview(detailButton)
+        self.detailButton = detailButton
         // スクロールビュー
-        stackView.addArrangedSubview(scrollView)
+        let scrollView = UIScrollView()
         scrollView.backgroundColor = R.color.carouselBackground()
+        stackView.addArrangedSubview(scrollView)
+        self.scrollView = scrollView
+        // アイテムスタックビュー
+        let itemStackView = UIStackView()
         scrollView.addSubview(itemStackView)
+        self.itemStackView = itemStackView
     }
     
     func setupLayout(_ type: CarouseSize) {

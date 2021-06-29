@@ -36,8 +36,8 @@ class Page2ViewController: PageViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupView()
-        setupLayout()
+        setupViews()
+        layoutViews()
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -51,7 +51,7 @@ class Page2ViewController: PageViewController {
 
 private extension Page2ViewController {
     
-    func setupView() {
+    func setupViews() {
         view.backgroundColor = R.color.background()
         // 部品を格納するスタックビュー
         let stackView = UIStackView()
@@ -96,7 +96,7 @@ private extension Page2ViewController {
         showHalfModalButton.addTarget(self, action: #selector(showHalfModalTapped), for: .touchUpInside)
     }
     
-    func setupLayout() {
+    func layoutViews() {
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
         stackView.alignment = .center

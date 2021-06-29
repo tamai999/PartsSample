@@ -11,14 +11,14 @@ enum DebugUIStyle: Int { case light = 0, dark }
 /// デバッグ用の操作スイッチビュー
 class DebugControllView: UIView {
     // MARK: - private properties
-    let uiStyleSegmentedControl = UISegmentedControl(items: ["light", "dark"])
+    private weak var uiStyleSegmentedControl: UISegmentedControl!
     
     // MARK: - lifecycle
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        setupView()
-        setupLayout()
+        setupViews()
+        layoutViews()
     }
     
     required init?(coder: NSCoder) {
@@ -35,14 +35,16 @@ class DebugControllView: UIView {
 // MARK: - private
 
 private extension DebugControllView {
-    func setupView() {
+    func setupViews() {
         backgroundColor = R.color.carouselBackground()
         
-        addSubview(uiStyleSegmentedControl)
+        let uiStyleSegmentedControl = UISegmentedControl(items: ["light", "dark"])
         uiStyleSegmentedControl.addTarget(self, action: #selector(uiStyleChanged), for: .valueChanged)
+        addSubview(uiStyleSegmentedControl)
+        self.uiStyleSegmentedControl = uiStyleSegmentedControl
     }
     
-    func setupLayout() {
+    func layoutViews() {
         uiStyleSegmentedControl.snp.makeConstraints { make in
             make.width.equalTo(200)
             make.height.equalTo(30)

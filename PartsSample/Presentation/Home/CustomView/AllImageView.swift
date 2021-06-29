@@ -56,7 +56,7 @@ class AllImageView: UIView {
     
     // MARK: - private properties
     
-    private let scrollHandleView = UIView()
+    private weak var scrollHandleView: UIView!
 
     private var imageLists: [(title: String, items: [ImageItem])] = []
     private var scrollHandleHideTask: DispatchWorkItem?
@@ -69,7 +69,7 @@ class AllImageView: UIView {
     
     // MARK: - internal properties
 
-    let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
+    weak var collectionView: UICollectionView!
 
     // 選択モード
     public var isSelectMode = false {
@@ -85,8 +85,8 @@ class AllImageView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        setupView()
-        setupLayout()
+        setupViews()
+        layoutViews()
     }
     
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -185,17 +185,19 @@ class AllImageView: UIView {
 // MARK: - private
 
 private extension AllImageView {
-    func setupView() {
+    func setupViews() {
         // 背景色
         backgroundColor = R.color.background()
 
         // 画像一覧
+        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.backgroundColor = R.color.background()
         collectionView.delegate = self
         collectionView.dataSource = self
         // スクロールバーはカスタムするのでデフォルトはオフ
         collectionView.showsVerticalScrollIndicator = false
         addSubview(collectionView)
+        self.collectionView = collectionView
         
         // 画像セル
         collectionView.register(ImageItemCellView.self, forCellWithReuseIdentifier: Const.cellReuseIdentifier)
@@ -206,19 +208,21 @@ private extension AllImageView {
                                 withReuseIdentifier: Const.headerReuseIdentifier)
         
         // スクロールハンドル
+        let scrollHandleView = UIView()
         scrollHandleView.backgroundColor = .green
         scrollHandleView.bounds = CGRect(x: 0, y: 0, width: Const.scrollHandleWidth, height: Const.scrollHandleHeight)
         scrollHandleView.layer.cornerRadius = Const.scrollHandleCornerRadius
         scrollHandleView.isUserInteractionEnabled = true
-        addSubview(scrollHandleView)
         scrollHandleView.isHidden = true    // 非表示にしておく
+        addSubview(scrollHandleView)
+        self.scrollHandleView = scrollHandleView
         // 画像一覧の画像サイズ変更のためのピンチジェスチャ
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: #selector(pinchGesture(gesture:)))
         collectionView.addGestureRecognizer(pinchGesture)
         self.pinchGesture = pinchGesture
     }
     
-    func setupLayout() {
+    func layoutViews() {
         // 画像一覧
         collectionView.snp.makeConstraints { make in
             make.top.left.right.equalTo(safeAreaLayoutGuide)

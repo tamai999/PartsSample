@@ -14,7 +14,7 @@ class HomeViewController: UIViewController {
     
     // MARK: - private properties
     
-    private let homeView = HomeView()
+    private weak var homeView: HomeView!
     private var pageViewController: HomePageViewController?
     
     // MARK: - lifecycle
@@ -22,7 +22,7 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupView()
+        setupViews()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -34,8 +34,11 @@ class HomeViewController: UIViewController {
 // MARK: - private 
 
 private extension HomeViewController {
-    func setupView() {
+    func setupViews() {
+        let homeView = HomeView()
         view.addSubview(homeView)
+        self.homeView = homeView
+        
         homeView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }

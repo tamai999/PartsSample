@@ -20,15 +20,15 @@ class Page1View: UIView {
     
     // MARK: - private properties
     
-    private let scrollView = UIScrollView()
-    private let refreshControl = CustomRefreshControl()
-    private let rootStackView = UIStackView()
-    private let bannerView = BannerView()
-    private let contentStackView = UIStackView()
+    private weak var scrollView: UIScrollView!
+    private weak var refreshControl: CustomRefreshControl!
+    private weak var rootStackView: UIStackView!
+    private weak var bannerView: BannerView!
+    private weak var contentStackView: UIStackView!
     // コンテンツは最大６つまで（２列×３段）
-    private let contentGroup0StackView = UIStackView()
-    private let contentGroup1StackView = UIStackView()
-    private let contentGroup2StackView = UIStackView()
+    private weak var contentGroup0StackView: UIStackView!
+    private weak var contentGroup1StackView: UIStackView!
+    private weak var contentGroup2StackView: UIStackView!
     private var contents: [UIView] = []
     
     // MARK: - internal properties
@@ -40,8 +40,8 @@ class Page1View: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        setupView()
-        setupLayout()
+        setupViews()
+        layoutViews()
     }
     
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -145,34 +145,50 @@ private extension Page1View {
         }
     }
     
-    func setupView() {
+    func setupViews() {
         backgroundColor = R.color.background()
         // スクロール領域
-        addSubview(scrollView)
+        let scrollView = UIScrollView()
         scrollView.backgroundColor = R.color.background()
+        addSubview(scrollView)
+        self.scrollView = scrollView
         // リフレッシュコントロール
+        let refreshControl = CustomRefreshControl()
         scrollView.refreshControl = refreshControl
         refreshControl.addTarget(self, action: #selector(refresh), for: .valueChanged)
         scrollView.delegate = self
+        self.refreshControl = refreshControl
         // スクロール領域の中身のセットアップ
-        scrollView.addSubview(rootStackView)
+        let rootStackView = UIStackView()
         rootStackView.backgroundColor = R.color.background()
+        scrollView.addSubview(rootStackView)
+        self.rootStackView = rootStackView
         // キャンペーンバナー
+        let bannerView = BannerView()
         rootStackView.addArrangedSubview(bannerView)
+        self.bannerView = bannerView
         // カテゴリ別コンテンツ（縦３段）
+        let contentStackView = UIStackView()
         contentStackView.layer.cornerRadius = Const.contentsCornerRadius
         contentStackView.layer.masksToBounds = true
         contentStackView.backgroundColor = R.color.background()
         rootStackView.addArrangedSubview(contentStackView)
+        self.contentStackView = contentStackView
         // １段目
+        let contentGroup0StackView = UIStackView()
         contentStackView.addArrangedSubview(contentGroup0StackView)
+        self.contentGroup0StackView = contentGroup0StackView
         // ２段目
+        let contentGroup1StackView = UIStackView()
         contentStackView.addArrangedSubview(contentGroup1StackView)
+        self.contentGroup1StackView = contentGroup1StackView
         // ３段目
+        let contentGroup2StackView = UIStackView()
         contentStackView.addArrangedSubview(contentGroup2StackView)
+        self.contentGroup2StackView = contentGroup2StackView
     }
     
-    func setupLayout() {
+    func layoutViews() {
         // スクロール領域
         scrollView.snp.makeConstraints { make in
             make.top.bottom.equalTo(self)

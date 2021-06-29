@@ -13,7 +13,7 @@ class CustomFlowLayout: UICollectionViewFlowLayout {
     
     // MARK: - private properties
     
-    private var sctionFrames: [CGRect] = []
+    private var sectionFrames: [CGRect] = []
     
     // MARK: - lifecycle
     
@@ -33,7 +33,7 @@ class CustomFlowLayout: UICollectionViewFlowLayout {
         guard let collectionView = collectionView else { return }
         
         // 各セクションの位置・サイズを計算し、sctionFrames に格納する
-        sctionFrames = []
+        sectionFrames = []
 
         let headerHeight = headerReferenceSize.height
         let footerHeight = footerReferenceSize.height
@@ -47,7 +47,7 @@ class CustomFlowLayout: UICollectionViewFlowLayout {
             height +=  sectionInset.top + sectionInset.bottom
             height +=  headerHeight + footerHeight
             
-            sctionFrames.append(CGRect(x: 0, y: yPosition , width:collectionView.frame.width, height: height))
+            sectionFrames.append(CGRect(x: 0, y: yPosition , width:collectionView.frame.width, height: height))
             // 次のセクションの位置
             yPosition += height
         }
@@ -55,8 +55,8 @@ class CustomFlowLayout: UICollectionViewFlowLayout {
     
     override func layoutAttributesForDecorationView(ofKind elementKind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
         let attributes = UICollectionViewLayoutAttributes(forDecorationViewOfKind: elementKind, with: indexPath)
-        guard indexPath.section < sctionFrames.count else { return nil }
-        let sctionFrame = sctionFrames[indexPath.section]
+        guard indexPath.section < sectionFrames.count else { return nil }
+        let sctionFrame = sectionFrames[indexPath.section]
 
         if elementKind == Const.kindSectionFrame {
             // セクションの枠の位置・サイズを返す
@@ -115,14 +115,14 @@ private class SectionBackgroundView: UICollectionReusableView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        setupView()
+        setupViews()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func setupView() {
+    func setupViews() {
         layer.cornerRadius = Const.frameCornerRadius
         layer.borderWidth = Const.borderWidth
         layer.borderColor = Const.borderColor.cgColor

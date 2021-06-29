@@ -10,15 +10,15 @@ class PageNViewController: PageViewController {
     
     // MARK: - private properties
     
-    private let label = UILabel()
+    private weak var label: UILabel!
     
     // MARK: - lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupView()
-        setupLayout()
+        setupViews()
+        layoutViews()
     }
 }
 
@@ -26,17 +26,19 @@ class PageNViewController: PageViewController {
 
 private extension PageNViewController {
     
-    func setupView() {
+    func setupViews() {
         view.backgroundColor = R.color.background()
         
         // ダミーラベル表示
+        let label = UILabel()
         label.text = "ページ \(pageIndex + 1)"
         label.textColor = R.color.label()
         label.backgroundColor = R.color.background()
         view.addSubview(label)
+        self.label = label
     }
     
-    func setupLayout() {
+    func layoutViews() {
         label.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             label.centerYAnchor.constraint(equalTo: view.centerYAnchor),

@@ -36,8 +36,8 @@ class Page4ViewController: PageViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        setupView()
-        setupLayout()
+        setupViews()
+        layoutViews()
     }
     
     override func viewWillLayoutSubviews() {
@@ -50,7 +50,7 @@ class Page4ViewController: PageViewController {
 // MARK: - private
 
 private extension Page4ViewController {
-    func setupView() {
+    func setupViews() {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
         collectionView.delegate = self
         collectionView.dataSource = self
@@ -65,7 +65,7 @@ private extension Page4ViewController {
         self.collectionView = collectionView
     }
     
-    func setupLayout() {
+    func layoutViews() {
         // コレクションビューのセーフエリア対応は自分で計算する
         collectionView.insetsLayoutMarginsFromSafeArea = false
         

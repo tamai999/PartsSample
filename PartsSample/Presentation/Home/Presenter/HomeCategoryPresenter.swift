@@ -39,13 +39,13 @@ extension HomeCategoryPresenter {
         ]
         
         let page1View = viewController.page1View
-        page1View.addCarousel(name: "カルーセル（大）", carouseSize: .large, items: items.shuffled(), contentCategory: .category1)
-        page1View.addCarousel(name: "カルーセル（大）", carouseSize: .large, items: items.shuffled(), contentCategory: .cateogry2)
-        page1View.addCarousel(name: "カルーセル（中）", carouseSize: .medium, items: items.shuffled(), contentCategory: .category3)
-        page1View.addCarousel(name: "カルーセル（中）", carouseSize: .medium, items: items.shuffled(), contentCategory: .category4)
-        page1View.addCarousel(name: "カルーセル（小）", carouseSize: .small, items: items.shuffled(), contentCategory: .category5)
+        page1View?.addCarousel(name: "カルーセル（大）", carouseSize: .large, items: items.shuffled(), contentCategory: .category1)
+        page1View?.addCarousel(name: "カルーセル（大）", carouseSize: .large, items: items.shuffled(), contentCategory: .category2)
+        page1View?.addCarousel(name: "カルーセル（中）", carouseSize: .medium, items: items.shuffled(), contentCategory: .category3)
+        page1View?.addCarousel(name: "カルーセル（中）", carouseSize: .medium, items: items.shuffled(), contentCategory: .category4)
+        page1View?.addCarousel(name: "カルーセル（小）", carouseSize: .small, items: items.shuffled(), contentCategory: .category5)
 
-        page1View.addDebugView()
+        page1View?.addDebugView()
     }
     
     func onViewWillAppear() {

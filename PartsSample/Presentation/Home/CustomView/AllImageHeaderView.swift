@@ -17,15 +17,15 @@ class AllImageHeaderView: UICollectionReusableView {
 
     // MARK: - private properties
 
-    private let titleLabel = UILabel()
+    private weak var titleLabel: UILabel!
     
     // MARK: - lifecycle
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        setupView()
-        setupLayout()
+        setupViews()
+        layoutViews()
     }
     
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -42,12 +42,14 @@ class AllImageHeaderView: UICollectionReusableView {
 // MARK: - private
 
 private extension AllImageHeaderView {
-    func setupView() {
+    func setupViews() {
+        let titleLabel = UILabel()
         titleLabel.textColor = R.color.label()
         addSubview(titleLabel)
+        self.titleLabel = titleLabel
     }
     
-    func setupLayout() {
+    func layoutViews() {
         titleLabel.frame = CGRect(x: Const.titleX, y: Const.titleY, width: Const.titleWidth, height: Const.titleHeight)
     }
 }

@@ -19,8 +19,8 @@ class BannerView: UIView {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        setupView()
-        setupLayout()
+        setupViews()
+        layoutViews()
     }
     
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -30,7 +30,7 @@ class BannerView: UIView {
 
 private extension BannerView {
     
-    func setupView() {
+    func setupViews() {
         bannerImageView.image = R.image.banner()
         bannerImageView.contentMode = .scaleAspectFill
         addSubview(bannerImageView)
@@ -41,7 +41,7 @@ private extension BannerView {
         addSubview(labelView)
     }
         
-    func setupLayout() {
+    func layoutViews() {
         // バナー画像
         bannerImageView.snp.makeConstraints { make in
             make.top.left.right.bottom.equalTo(self)

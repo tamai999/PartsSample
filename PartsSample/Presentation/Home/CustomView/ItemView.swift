@@ -14,11 +14,11 @@ fileprivate struct Const {
 class ItemView: UIView {
     
     // MARK: - private properties
-    private var imageView = UIImageView()
-    private let priceLabel = UILabel()
+    private weak var imageView: UIImageView!
+    private weak var priceLabel: UILabel!
     // 画像ロード後に画像のアスペクト比を維持した状態で、
     // 外側のビューの縦幅に合うように横幅の制約を更新するため、対象の制約を保持
-    var widthConstraint: NSLayoutConstraint?
+    private weak var widthConstraint: NSLayoutConstraint?
     
     // MARK: - lifecycle
     
@@ -26,7 +26,7 @@ class ItemView: UIView {
         super.init(frame: CGRect.zero)
         
         setupView(imageName: imageName, price: price)
-        setupLayout()
+        layoutViews()
     }
     
     required init?(coder: NSCoder) { fatalError("init(coder:) has not been implemented") }
@@ -38,44 +38,45 @@ private extension ItemView {
     
     func setupView(imageName: String, price: Int) {
         // スケルトン画像を表示
-        setupImageView(image: R.image.item_skeleton())
+        let imageView = UIImageView()
+        imageView.image = R.image.item_skeleton()
+        imageView.layer.cornerRadius = Const.imageCornerRadius
+        imageView.clipsToBounds = true
         addSubview(imageView)
+        self.imageView = imageView
         // 画像の読み込み開始
         loadImage(name: imageName)
         // 価格
+        let priceLabel = UILabel()
         priceLabel.text = " ¥\(price.withComma) "
         priceLabel.textColor = .white
         priceLabel.font = UIFont.priceFont
         priceLabel.backgroundColor = UIColor.black.withAlphaComponent(0.5)
         priceLabel.isHidden = true
         addSubview(priceLabel)
+        self.priceLabel = priceLabel
     }
     
-    func setupImageView(image: UIImage?) {
-        imageView.image = image
-        imageView.layer.cornerRadius = Const.imageCornerRadius
-        imageView.clipsToBounds = true
-    }
-    
-    func setupLayout() {
+    func layoutViews() {
         // 画像
         imageView.snp.makeConstraints { make in
             make.edges.equalToSuperview()
         }
-        setupImageViewAspet()
+        setupImageViewAspect()
         // 価格
         priceLabel.snp.makeConstraints { make in
             make.left.bottom.equalToSuperview()
         }
     }
     
-    func setupImageViewAspet() {
+    func setupImageViewAspect() {
         guard let image = imageView.image else { return }
         
         if let constraint = widthConstraint {
             removeConstraint(constraint)
         }
         
+        // アイテムの横幅の制約をロードした画像サイズに合わせて変更する
         let aspectRatio = image.size.width / image.size.height
         let widthConstraint = widthAnchor.constraint(equalTo: heightAnchor, multiplier: aspectRatio)
         widthConstraint.isActive = true
@@ -90,7 +91,7 @@ private extension ItemView {
         DispatchQueue.main.asyncAfter(deadline: .now() + loadTime) {
             // 画像を差し替える
             self.imageView.image = image
-            self.setupImageViewAspet()
+            self.setupImageViewAspect()
             // 価格を表示する
             self.bringSubviewToFront(self.priceLabel)
             self.priceLabel.isHidden = false
