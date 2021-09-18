@@ -55,6 +55,11 @@ class HomeView: UIView {
     func setPageIndex(_ index: Int) {
         pageSwitchView.updatePageIndex(index)
     }
+    
+    /// レイアウトし直す
+    func updateLayout() {
+        pageSwitchView.updateLayoutWithCurrentIndex()
+    }
 }
 
 // MARK: - private

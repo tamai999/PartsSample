@@ -16,6 +16,7 @@ class HomeViewController: UIViewController {
     
     private weak var homeView: HomeView!
     private var pageViewController: HomePageViewController?
+    private var currentViewWidth: CGFloat = .zero
     
     // MARK: - lifecycle
     
@@ -28,6 +29,17 @@ class HomeViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         // 初期ページ設定
         homeView.setPageIndex(0)
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        // 横幅が変わった
+        if view.frame.width != currentViewWidth {
+            currentViewWidth = view.frame.width
+            DispatchQueue.main.async {
+                self.homeView.updateLayout()
+            }
+        }
     }
 }
 

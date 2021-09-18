@@ -29,6 +29,7 @@ class PageSwitchView: UIView {
     private weak var pageIndicator: UIView!
     private weak var pageIndicatorXConstraint: NSLayoutConstraint?
     private var pageNames: [String] = []
+    private var currentIndex = -1
     
     // MARK: - internal properties
     
@@ -64,8 +65,9 @@ class PageSwitchView: UIView {
     
     /// ページ切り替えビューの表示ページを変更する（適宜スクロールする）
     /// - Parameter index: ページ番号(0~)
-    func updatePageIndex(_ index: Int) {
+    func updatePageIndex(_ index: Int, animated: Bool = true) {
         guard index < pageStackView.arrangedSubviews.count else { return }
+        currentIndex = index
         
         let buttonWidth = scrollView.contentSize.width / CGFloat(pageStackView.arrangedSubviews.count)
         if scrollView.bounds.width < scrollView.contentSize.width {
@@ -77,12 +79,9 @@ class PageSwitchView: UIView {
             let viewCenter = bounds.width / 2
             // スクロール範囲を超えたスクロールはさせない
             var offsetX = pageCenter - viewCenter
-            if offsetX < 0 {
-                offsetX = 0
-            } else if offsetX > scrollView.contentSize.width - bounds.width {
-                offsetX = scrollView.contentSize.width - bounds.width
-            }
-            scrollView.setContentOffset(CGPoint(x: offsetX, y: 0), animated: true)
+            offsetX = max(offsetX, 0)
+            offsetX = min(offsetX, scrollView.contentSize.width - bounds.width)
+            scrollView.setContentOffset(CGPoint(x: offsetX, y: 0), animated: animated)
         }
         
         // ページのインジケーターを移動する
@@ -97,6 +96,13 @@ class PageSwitchView: UIView {
 
         UIView.animate(withDuration: 0.2) {
             self.layoutIfNeeded()
+        }
+    }
+    
+    /// ウィンドの幅が変わった等によりインデックスが中央に来るようにレイアウトしなおす
+    func updateLayoutWithCurrentIndex() {
+        if currentIndex != -1 {
+            updatePageIndex(currentIndex, animated: false)
         }
     }
 }
